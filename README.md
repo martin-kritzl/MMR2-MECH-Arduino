@@ -14,7 +14,7 @@ This is an implementation for controlling a robot with up to three Makeblock MS-
 * Or download zip from: https://github.com/martin-kritzl/MMR2-MECH-Arduino
 * In Arduino:
   * Tools
-    * Board: Arduino/Genuino Uno
+    * Board: Arduino/Genuino Mega 2560
     * Programmer: AVRISP mkII
     * Port: ...choose
   * Sketch
