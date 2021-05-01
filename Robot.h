@@ -4,7 +4,8 @@
 #include "MeSmartServo.h"
 
 #define BUFFER_LEN 20
-#define ANGLE_TOLLERANCE 3
+#define ANGLE_TOLERANCE 15
+#define ANGLE_TOLERANCE_EXACT 3
 #define SPEED_MIN 5.0
 #define SPEED_INCREMENT 0.2
 
@@ -27,6 +28,7 @@ struct RobotInstruction
     DriveInstruction motor1; ///< Drive command of the first motor
     DriveInstruction motor2; ///< Drive command of the second motor
     DriveInstruction motor3; ///< Drive command of the third motor
+    bool exact = false;
     bool enabled = false;
 };
 
@@ -48,7 +50,7 @@ class Robot{
         bool cmdAvailable();
         bool newCmd(RobotInstruction cmd);
         bool checkCmd();
-        bool checkServo(int id, int angle);
+        bool checkServo(int id, int angle, bool exact);
         bool checkAllServo(RobotInstruction cmd);
         bool driveServo(int id, DriveInstruction cmd);
         bool driveAllServo(RobotInstruction cmd);

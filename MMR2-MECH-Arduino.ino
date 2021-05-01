@@ -51,19 +51,29 @@ void setup() {
     cmd1.enabled=true;
     cmd1.motor1.angle = 20;
     cmd1.motor1.speed = 10;
-    robot1->newCmd(cmd1);
-
+    cmd1.exact = true;
+    
     RobotInstruction cmd2;
     cmd2.enabled=true;
     cmd2.motor1.angle = -100;
     cmd2.motor1.speed = 30;
-    robot1->newCmd(cmd2);
+
+    RobotInstruction cmd3;
+    cmd3.enabled=true;
+    cmd3.motor1.angle = -150;
+    cmd3.motor1.speed = 10;
+    cmd3.exact = true;
 
     robot1->newCmd(cmd1);
     robot1->newCmd(cmd2);
 
     robot1->newCmd(cmd1);
     robot1->newCmd(cmd2);
+    robot1->newCmd(cmd3);
+
+    robot1->newCmd(cmd1);
+    robot1->newCmd(cmd2);
+    robot1->newCmd(cmd3);
 }
 
 void loop() {
