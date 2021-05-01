@@ -1,9 +1,13 @@
-#include <MSmartServo.h>
+#include <MeSmartServo.h>
 #include <SoftwareSerial.h>
 
 #define BUFFER_LEN 20
-#define RX_PIN 10
-#define TX_PIN 11
+#define UART1_TX 18
+#define UART1_RX 19
+#define UART2_TX 16
+#define UART2_RX 17
+#define UART3_TX 14
+#define UART3_RX 15
 
 /** 
  * @struct DriveInstruction

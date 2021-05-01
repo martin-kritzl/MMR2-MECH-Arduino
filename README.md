@@ -4,7 +4,7 @@ This is an implementation for controlling a robot with up to three Makeblock MS-
 # Prerequisites
 
 * Arduino: https://www.arduino.cc/en/software
-* MSmartServo-Driver: https://github.com/Makeblock-official/MSmartServo-Driver
+* Makeblock-Libraries: https://github.com/Makeblock-official/Makeblock-Libraries
 * (optional) vscode: https://code.visualstudio.com/
   * with extension: vsciot-vscode.vscode-arduino
 
