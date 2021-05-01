@@ -17,8 +17,8 @@
 //    {NC, NC}, {NC, NC}, {NC, NC}, {NC, NC}, {NC, NC}, {NC, NC}, {NC, NC}
 //  };
 
-MeSmartServo mysmartservo(5);
-DriveInstruction move_buffer[BUFFER_LEN];
+// Robot robot1(1, 5, 1);
+Robot* robot1;
 
 /**
  * Interface:
@@ -41,11 +41,29 @@ DriveInstruction move_buffer[BUFFER_LEN];
  */
 
 void setup() {
-    mysmartservo.begin(115200);         // set the data rate for the Smart Servos
-    delay(5);
     Serial.begin(115200);               // set the data rate for the SoftwareSerial port
-    mysmartservo.assignDevIdRequest();  // distribution device ID number to the smart servo link.
     delay(50);                          // must delay over 50ms
+
+    robot1 = new Robot(1, 5, 1);
+    Serial.print("Setup");
+
+    RobotInstruction cmd1;
+    cmd1.enabled=true;
+    cmd1.motor1.angle = 20;
+    cmd1.motor1.speed = 10;
+    robot1->newCmd(cmd1);
+
+    RobotInstruction cmd2;
+    cmd2.enabled=true;
+    cmd2.motor1.angle = -30;
+    cmd2.motor1.speed = 30;
+    robot1->newCmd(cmd2);
+
+    robot1->newCmd(cmd1);
+    robot1->newCmd(cmd2);
+
+    robot1->newCmd(cmd1);
+    robot1->newCmd(cmd2);
 }
 
 void loop() {
@@ -57,7 +75,9 @@ void loop() {
     //mysmartservo.setBreak(<id>;<release [true,false]>); //set smart servo break status.
     //mysmartservo.getAngleRequest(<id>); //This function used to get the smart servo's angle.
 
-    mysmartservo.move(1, 20, 20);
+    robot1->checkCmd();
     Serial.print("Voltage: ");
-    Serial.println(mysmartservo.getVoltageRequest(1));
+    Serial.println(robot1->getServos()->getVoltageRequest(1));
+    Serial.print("Target angle: ");
+    Serial.println(robot1->getCurrentDriveInstruction(1).angle);
 }
