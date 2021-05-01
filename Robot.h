@@ -5,6 +5,8 @@
 
 #define BUFFER_LEN 20
 #define ANGLE_TOLLERANCE 3
+#define SPEED_MIN 5.0
+#define SPEED_INCREMENT 0.2
 
 /** 
  * @struct DriveInstruction
@@ -13,7 +15,7 @@
 struct DriveInstruction
 {
     int angle; ///< Absolute angle of the motor [degrees].
-    int speed=-1; ///< Speed of the motor [rpm].
+    float speed=-1.0; ///< Speed of the motor [rpm].
 };
 
 /** 
@@ -34,6 +36,7 @@ class Robot{
         int num_servos;
         MeSmartServo *servos;
         RobotInstruction move_buffer[BUFFER_LEN];
+        float last_speed[3];
         int write_buffer;
         int read_buffer;
         bool moving;
@@ -50,6 +53,8 @@ class Robot{
         bool driveServo(int id, DriveInstruction cmd);
         bool driveAllServo(RobotInstruction cmd);
         void finishCurrentRobotInstruction();
+        void resetSpeeds();
+        DriveInstruction smoothCmd(DriveInstruction cmd, float cur_speed);
         // bool start();
         DriveInstruction getDriveInstruction(int id, RobotInstruction cmd);
         DriveInstruction getCurrentDriveInstruction(int id);

@@ -55,7 +55,7 @@ void setup() {
 
     RobotInstruction cmd2;
     cmd2.enabled=true;
-    cmd2.motor1.angle = -30;
+    cmd2.motor1.angle = -100;
     cmd2.motor1.speed = 30;
     robot1->newCmd(cmd2);
 

@@ -7,6 +7,10 @@ Robot::Robot(int id, int port, int num_servos) {
     this->read_buffer = 0;
     this->moving = false;
 
+    this->last_speed[0] = 0.0;
+    this->last_speed[1] = 0.0;
+    this->last_speed[2] = 0.0;
+
     this->servos = new MeSmartServo(port);
     this->servos->begin(115200);
     delay(5);
@@ -44,8 +48,15 @@ RobotInstruction Robot::getCurrentRobotInstruction() {
     return this->move_buffer[this->read_buffer];
 }
 
+void Robot::resetSpeeds() {
+    for (int i = 0; i < this->num_servos;i++) {
+        this->last_speed[i] = 0;
+    }
+}
+
 void Robot::finishCurrentRobotInstruction() {
     this->move_buffer[this->read_buffer].enabled = false;
+    this->resetSpeeds();
     this->increase_read_buffer();
 }
 
@@ -73,22 +84,15 @@ DriveInstruction Robot::getCurrentDriveInstruction(int id) {
 // }
 
 bool Robot::checkCmd() {
-    Serial.println("Check Cmd");
     if (this->cmdAvailable() == false) {
+        this->moving = false;
         return true;
     }
-    Serial.println(this->moving);
-    if (this->moving == false) {
-        
-        this->driveAllServo(this->getCurrentRobotInstruction());
-    }
-    else if (this->checkAllServo(this->getCurrentRobotInstruction())) {
+
+    this->driveAllServo(this->getCurrentRobotInstruction());
+
+    if (this->checkAllServo(this->getCurrentRobotInstruction())) {
         this->finishCurrentRobotInstruction();
-        if (this->cmdAvailable() == true) {
-            this->driveAllServo(this->getCurrentRobotInstruction());
-        } else {
-            this->moving = false;
-        }
     }
 }
 
@@ -109,16 +113,35 @@ bool Robot::checkServo(int id, int angle) {
 }
 
 bool Robot::driveServo(int id, DriveInstruction cmd) {
-    Serial.println("Drive Servo");
     this->moving = true;
     return this->servos->moveTo(id, cmd.angle, cmd.speed);
+}
+
+DriveInstruction Robot::smoothCmd(DriveInstruction cmd, float last_speed) {
+    DriveInstruction new_drive;
+    if (abs(last_speed) < SPEED_MIN) {
+        last_speed = SPEED_MIN;
+    } else if (abs(last_speed) >= cmd.speed) {
+        last_speed -= SPEED_INCREMENT;
+    } else {
+        last_speed += SPEED_INCREMENT;
+    }
+    
+    new_drive.angle = cmd.angle;
+    new_drive.speed = last_speed;
+
+    return new_drive;
 }
 
 bool Robot::driveAllServo(RobotInstruction cmd) {
     Serial.println("Drive All Servo");
     bool success = true;
     for (int i = 1; i <= this->num_servos; i++) {
-        if (this->driveServo(id, this->getDriveInstruction(i, cmd)) == false) {
+        DriveInstruction new_cmd = this->smoothCmd(this->getDriveInstruction(i, cmd), this->last_speed[i-1]);
+        this->last_speed[i-1] = new_cmd.speed;
+        Serial.print("Speed after : ");
+        Serial.println(new_cmd.speed);
+        if (this->driveServo(id, new_cmd) == false) {
             success = false;
         }
     }
