@@ -20,6 +20,7 @@ MePort_Sig mePort[17] =
 // Robot robot1(1, 5, 1);
 
 Robot* robots[ROBOTS_NUM];
+int num_servos[ROBOTS_NUM];
 
 /**
  * Interface:
@@ -48,8 +49,11 @@ void setup() {
     Serial.begin(115200);               // set the data rate for the SoftwareSerial port
     delay(50);                          // must delay over 50ms
 
-    robots[0] = new Robot(1, 5, SERVO_NUM_1);
-    robots[1] = new Robot(2, 6, SERVO_NUM_2);
+    num_servos[0] = SERVO_NUM_1;
+    num_servos[1] = SERVO_NUM_2;
+
+    robots[0] = new Robot(1, 5, num_servos[0]);
+    robots[1] = new Robot(2, 6, num_servos[1]);
 
     float init_angles[3];
     init_angles[0] = 180;
@@ -311,7 +315,10 @@ RobotInstruction parse_move(char input[])
 
 void print_move(int id, RobotInstruction cmd) {
     Serial.print(id);Serial.print(";done;move;");Serial.print((cmd.exact) ? "true;" : "false;");
-    Serial.print(cmd.servo[0].angle);Serial.print(";");Serial.print(cmd.servo[0].speed);Serial.println("");
+    for (int i = 0; i < num_servos[id-1];i++) {
+        Serial.print(cmd.servo[i].angle);Serial.print(";");Serial.print(cmd.servo[i].speed);Serial.print(";");
+    }
+    Serial.println("");
 }
 
 void loop() {

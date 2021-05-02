@@ -2,7 +2,7 @@
 #include <SoftwareSerial.h>
 #include "Robot.h"
 
-#define ROBOTS_NUM 1
+#define ROBOTS_NUM 2
 #define SERVO_NUM_1 2
 #define SERVO_NUM_2 3
 #define INPUT_SIZE 30
