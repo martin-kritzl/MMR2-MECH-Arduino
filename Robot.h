@@ -4,10 +4,10 @@
 #include "MeSmartServo.h"
 
 #define BUFFER_LEN 20
-#define ANGLE_TOLERANCE 15
-#define ANGLE_TOLERANCE_EXACT 3
-#define SPEED_MIN 5.0
-#define SPEED_INCREMENT 0.2
+#define ANGLE_TOLERANCE 5
+#define ANGLE_TOLERANCE_EXACT 2
+#define SPEED_MIN 4.5
+#define SPEED_INCREMENT 0.1
 
 /** 
  * @struct DriveInstruction
@@ -57,6 +57,7 @@ class Robot{
         bool driveAllServo(RobotInstruction cmd);
         void finishCurrentRobotInstruction();
         void resetSpeeds();
+        void stopServos();
         DriveInstruction smoothCmd(DriveInstruction cmd, float cur_speed);
         // bool start();
         DriveInstruction getDriveInstruction(int id, RobotInstruction cmd);

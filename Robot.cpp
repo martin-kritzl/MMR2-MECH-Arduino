@@ -104,11 +104,22 @@ bool Robot::checkAllServo(RobotInstruction cmd) {
     if (this->cmdAvailable() == false) return false;
     for (int i = 1; i <= this->num_servos; i++) {
         DriveInstruction drive = this->getCurrentDriveInstruction(i);
-        if (this->checkServo(i, drive.angle + this->init_angle[i-1], cmd.exact) == false) {
+        if (this->checkServo(i, drive.angle - this->init_angle[i-1], cmd.exact) == false) {
             return false;
+        } else {
+            if (cmd.exact) {
+                this->stopServos();
+            }
         }
     }
     return true;
+}
+
+void Robot::stopServos() {
+    for (int i = 1; i<= this->num_servos;i++) {
+        this->servos->setPwmMove(i,0);
+        // this->servos->setBreak(i, true);
+    }
 }
 
 bool Robot::checkServo(int id, int angle, bool exact) {
@@ -121,7 +132,12 @@ bool Robot::checkServo(int id, int angle, bool exact) {
 
 bool Robot::driveServo(int id, DriveInstruction cmd) {
     this->moving = true;
-    return this->servos->moveTo(id, cmd.angle + this->init_angle[id-1], cmd.speed);
+    // this->servos->setBreak(id, false);
+    Serial.print("Drive Servo: ");Serial.println(id);
+    Serial.print("; Angle:  ");Serial.print(cmd.angle);
+    Serial.print("; Cur Ang:");Serial.print(this->servos->getAngleRequest(id)+this->init_angle[id-1]);
+    Serial.print("; Speed:  "); Serial.println(cmd.speed);
+    return this->servos->moveTo(id, cmd.angle - this->init_angle[id-1], cmd.speed);
 }
 
 DriveInstruction Robot::smoothCmd(DriveInstruction cmd, float last_speed) {
@@ -153,7 +169,8 @@ bool Robot::driveAllServo(RobotInstruction cmd) {
         this->last_speed[i-1] = new_cmd.speed;
         Serial.print("Speed after : ");
         Serial.println(new_cmd.speed);
-        if (this->driveServo(id, new_cmd) == false) {
+
+        if (this->driveServo(i, new_cmd) == false) {
             success = false;
         }
     }
