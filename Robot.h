@@ -44,7 +44,7 @@ class Robot{
         bool moving;
         float init_angle[3];
     public:
-        Robot(int id, int port, int num_servos, float init_angle[3]);
+        Robot(int id, int port, int num_servos);
         ~Robot();
         void increase_write_buffer();
         void increase_read_buffer();
@@ -55,9 +55,11 @@ class Robot{
         bool checkAllServo(RobotInstruction cmd);
         bool driveServo(int id, DriveInstruction cmd);
         bool driveAllServo(RobotInstruction cmd);
-        void finishCurrentRobotInstruction();
+        RobotInstruction finishCurrentRobotInstruction();
+        RobotInstruction cmdFinished();
         void resetSpeeds();
         void stopServos();
+        void setInitAngles(float init_angles[3]);
         DriveInstruction smoothCmd(DriveInstruction cmd, float cur_speed);
         // bool start();
         DriveInstruction getDriveInstruction(int id, RobotInstruction cmd);

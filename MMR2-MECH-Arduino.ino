@@ -18,7 +18,8 @@ MePort_Sig mePort[17] =
 //  };
 
 // Robot robot1(1, 5, 1);
-Robot* robot1;
+
+Robot* robots[ROBOTS_NUM];
 
 /**
  * Interface:
@@ -47,12 +48,17 @@ void setup() {
     Serial.begin(115200);               // set the data rate for the SoftwareSerial port
     delay(50);                          // must delay over 50ms
 
+    robots[0] = new Robot(1, 5, SERVO_NUM_1);
+    robots[1] = new Robot(2, 6, SERVO_NUM_2);
+
     float init_angles[3];
     init_angles[0] = 180;
     init_angles[1] = 0;
     init_angles[2] = 0;
-    robot1 = new Robot(1, 5, ROBOTS_NUM, init_angles);
-    Serial.print("Setup");
+
+    robots[0]->setInitAngles(init_angles);
+
+    Serial.print("DEBUG: Setup");
 
     // RobotInstruction cmd1;
     // cmd1.enabled=true;
@@ -89,7 +95,7 @@ void setup() {
     cmd1.motor2.angle = -4;
     cmd1.motor2.speed = 3;
     cmd1.exact = false;
-    robot1->newCmd(cmd1);
+    robots[0]->newCmd(cmd1);
 
     RobotInstruction cmd2;
     cmd2.enabled=true;
@@ -98,7 +104,7 @@ void setup() {
     cmd2.motor2.angle = -6;
     cmd2.motor2.speed = 0;
     cmd2.exact = false;
-    robot1->newCmd(cmd2);
+    robots[0]->newCmd(cmd2);
 
     RobotInstruction cmd3;
     cmd3.enabled=true;
@@ -107,7 +113,7 @@ void setup() {
     cmd3.motor2.angle = -8;
     cmd3.motor2.speed = 0;
     cmd3.exact = false;
-    robot1->newCmd(cmd3);
+    robots[0]->newCmd(cmd3);
 
     RobotInstruction cmd4;
     cmd4.enabled=true;
@@ -116,7 +122,7 @@ void setup() {
     cmd4.motor2.angle = -10;
     cmd4.motor2.speed = 5;
     cmd4.exact = false;
-    robot1->newCmd(cmd4);
+    robots[0]->newCmd(cmd4);
 
     RobotInstruction cmd5;
     cmd5.enabled=true;
@@ -125,7 +131,7 @@ void setup() {
     cmd5.motor2.angle = -12;
     cmd5.motor2.speed = 1;
     cmd5.exact = false;
-    robot1->newCmd(cmd5);
+    robots[0]->newCmd(cmd5);
 
     RobotInstruction cmd6;
     cmd6.enabled=true;
@@ -134,7 +140,7 @@ void setup() {
     cmd6.motor2.angle = -14;
     cmd6.motor2.speed = 6;
     cmd6.exact = false;
-    robot1->newCmd(cmd6);
+    robots[0]->newCmd(cmd6);
 
     RobotInstruction cmd7;
     cmd7.enabled=true;
@@ -143,7 +149,7 @@ void setup() {
     cmd7.motor2.angle = -15;
     cmd7.motor2.speed = 10;
     cmd7.exact = false;
-    robot1->newCmd(cmd7);
+    robots[0]->newCmd(cmd7);
 
     RobotInstruction cmd8;
     cmd8.enabled=true;
@@ -152,7 +158,7 @@ void setup() {
     cmd8.motor2.angle = -17;
     cmd8.motor2.speed = 0;
     cmd8.exact = false;
-    robot1->newCmd(cmd8);
+    robots[0]->newCmd(cmd8);
 
     RobotInstruction cmd9;
     cmd9.enabled=true;
@@ -161,7 +167,7 @@ void setup() {
     cmd9.motor2.angle = -19;
     cmd9.motor2.speed = 2;
     cmd9.exact = false;
-    robot1->newCmd(cmd9);
+    robots[0]->newCmd(cmd9);
 
     RobotInstruction cmd10;
     cmd10.enabled=true;
@@ -170,7 +176,7 @@ void setup() {
     cmd10.motor2.angle = -20;
     cmd10.motor2.speed = 13;
     cmd10.exact = false;
-    robot1->newCmd(cmd10);
+    robots[0]->newCmd(cmd10);
 
     RobotInstruction cmd11;
     cmd11.enabled=true;
@@ -179,7 +185,7 @@ void setup() {
     cmd11.motor2.angle = -21;
     cmd11.motor2.speed = 14;
     cmd11.exact = false;
-    robot1->newCmd(cmd11);
+    robots[0]->newCmd(cmd11);
 
     RobotInstruction cmd12;
     cmd12.enabled=true;
@@ -188,7 +194,7 @@ void setup() {
     cmd12.motor2.angle = -23;
     cmd12.motor2.speed = 20;
     cmd12.exact = false;
-    robot1->newCmd(cmd12);
+    robots[0]->newCmd(cmd12);
 
     RobotInstruction cmd13;
     cmd13.enabled=true;
@@ -197,7 +203,7 @@ void setup() {
     cmd13.motor2.angle = -24;
     cmd13.motor2.speed = 0;
     cmd13.exact = false;
-    robot1->newCmd(cmd13);
+    robots[0]->newCmd(cmd13);
 
     RobotInstruction cmd14;
     cmd14.enabled=true;
@@ -206,7 +212,7 @@ void setup() {
     cmd14.motor2.angle = -25;
     cmd14.motor2.speed = 2;
     cmd14.exact = false;
-    robot1->newCmd(cmd14);
+    robots[0]->newCmd(cmd14);
 
     RobotInstruction cmd15;
     cmd15.enabled=true;
@@ -215,7 +221,7 @@ void setup() {
     cmd15.motor2.angle = -26;
     cmd15.motor2.speed = 0;
     cmd15.exact = false;
-    robot1->newCmd(cmd15);
+    robots[0]->newCmd(cmd15);
 
     RobotInstruction cmd16;
     cmd16.enabled=true;
@@ -224,7 +230,7 @@ void setup() {
     cmd16.motor2.angle = -28;
     cmd16.motor2.speed = 2;
     cmd16.exact = false;
-    robot1->newCmd(cmd16);
+    robots[0]->newCmd(cmd16);
 
     RobotInstruction cmd17;
     cmd17.enabled=true;
@@ -233,7 +239,7 @@ void setup() {
     cmd17.motor2.angle = -28;
     cmd17.motor2.speed = 0;
     cmd17.exact = false;
-    robot1->newCmd(cmd17);
+    robots[0]->newCmd(cmd17);
 
     RobotInstruction cmd18;
     cmd18.enabled=true;
@@ -242,7 +248,7 @@ void setup() {
     cmd18.motor2.angle = -29;
     cmd18.motor2.speed = 2;
     cmd18.exact = true;
-    robot1->newCmd(cmd18);
+    robots[0]->newCmd(cmd18);
 
     RobotInstruction cmd19;
     cmd19.enabled=true;
@@ -251,7 +257,7 @@ void setup() {
     cmd19.motor2.angle = 0;
     cmd19.motor2.speed = 10;
     cmd19.exact = true;
-    robot1->newCmd(cmd19);
+    robots[0]->newCmd(cmd19);
 }
 
 RobotInstruction parse_move(char input[])
@@ -303,6 +309,11 @@ RobotInstruction parse_move(char input[])
     return result;
 }
 
+void print_move(int id, RobotInstruction cmd) {
+    Serial.print(id);Serial.print(";done;move;");Serial.print((cmd.exact) ? "true;" : "false;");
+    Serial.print(cmd.motor1.angle);Serial.print(";");Serial.print(cmd.motor1.speed);Serial.println("");
+}
+
 void loop() {
     //Important commands:
     //mysmartservo.setInitAngle(<id>); //This function used to get the smart servo's angle.
@@ -316,21 +327,28 @@ void loop() {
         char serial_in[INPUT_SIZE];
         byte serial_size = Serial.readBytes(serial_in, INPUT_SIZE);
         serial_in[serial_size] = 0; // add 0-terminator to end of string
-        Serial.print("Command recevied: ");
+        Serial.print("DEBUG: Command recevied: ");
         Serial.println(serial_in);
-        Serial.println("Parsing...");
+        Serial.println("DEBUG: Parsing...");
         RobotInstruction cmd = parse_move(serial_in); // parse the incoming command
         if (cmd.enabled == true) {
-            robot1->newCmd(cmd);
+            robots[0]->newCmd(cmd);
         } else {
-            Serial.print("Wrong input");
+            Serial.print("DEBUG: Wrong input");
         }
         
     }
 
-    robot1->checkCmd();
-    Serial.print("Voltage: ");
-    Serial.println(robot1->getServos()->getVoltageRequest(1));
-    Serial.print("Target angle: ");
-    Serial.println(robot1->getCurrentDriveInstruction(1).angle);
+    for (int i = 0; i < ROBOTS_NUM; i++) {
+        RobotInstruction actCmd = robots[i]->cmdFinished();
+        if (actCmd.enabled == true) {
+            print_move(i+1, actCmd);
+        }
+        Serial.print("DEBUG: Voltage: ");
+        Serial.println(robots[0]->getServos()->getVoltageRequest(1));
+        Serial.print("DEBUG: Target angle: ");
+        Serial.println(robots[0]->getCurrentDriveInstruction(1).angle);
+    }
+
+    
 }
