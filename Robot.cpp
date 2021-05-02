@@ -126,11 +126,10 @@ bool Robot::checkAllServo(RobotInstruction cmd) {
         DriveInstruction drive = this->getCurrentDriveInstruction(i);
         if (this->checkServo(i, drive.angle - this->init_angle[i-1], cmd.exact) == false) {
             return false;
-        } else {
-            if (cmd.exact) {
-                this->stopServos();
-            }
         }
+    }
+    if (cmd.exact) {
+        this->stopServos();
     }
     return true;
 }
