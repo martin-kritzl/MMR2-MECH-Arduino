@@ -2,6 +2,9 @@
 #include <SoftwareSerial.h>
 #include "Robot.h"
 
+#define ROBOTS_NUM 2
+#define INPUT_SIZE 30
+
 #define UART1_TX 18
 #define UART1_RX 19
 #define UART2_TX 16

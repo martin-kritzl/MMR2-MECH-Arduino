@@ -1,14 +1,14 @@
 #include "MMR2-MECH-Arduino.h"
 // #include "MeAuriga.h"
 
- MePort_Sig mePort[17] =
- {
-   { NC, NC }, {   5,   4 }, {   3,   2 }, {   7,   6 }, {   9,   8 }, 
-   { UART2_TX, UART2_RX }, { A10, A15 }, {  A9, A14 }, {  A8, A13 }, {  A7, A12 }, 
-   //             LIGHT2        LIGHT1        TEMP          SOUND
-   { A6,A11 }, {  NC,  A2 }, {  NC,  A3 }, {  NC,  A0 }, {  NC,  A1 },
-   { NC, NC }, { NC, NC },
- };
+MePort_Sig mePort[17] =
+{
+    { NC, NC }, {   5,   4 }, {   3,   2 }, {   7,   6 }, {   9,   8 }, 
+    { UART2_TX, UART2_RX }, { A10, A15 }, {  A9, A14 }, {  A8, A13 }, {  A7, A12 }, 
+    //             LIGHT2        LIGHT1        TEMP          SOUND
+    { A6,A11 }, {  NC,  A2 }, {  NC,  A3 }, {  NC,  A0 }, {  NC,  A1 },
+    { NC, NC }, { NC, NC },
+};
 
 //  MePort_Sig mePort[17] =
 //  {
@@ -22,22 +22,25 @@ Robot* robot1;
 
 /**
  * Interface:
- *      incoming: move;<exact>;<theta1>;<speed1>;<theta2>;<speed2>;<theta3>;<speed3>
- *      result: done;move;<exact>;<theta1>;<speed1>;<theta2>;<speed2>;<theta3>;<speed3>
+ *      incoming: <id>;move;<exact>;<theta1>;<speed1>;<theta2>;<speed2>;<theta3>;<speed3>
+ *      result: <id>;done;move;<exact>;<theta1>;<speed1>;<theta2>;<speed2>;<theta3>;<speed3>
  * 
- *      incoming: move;home
- *      result: done
+ *      1;move;true;142;10;-29;10
+ *      1;move;true;180;10;0;10
  * 
- *      incoming: move;stop
+ *      incoming: <id>;move;home;speed
+ *      result: <id>;done;move;<exact>;<theta1>;<speed1>;<theta2>;<speed2>;<theta3>;<speed3>
  * 
- *      incoming: read;angles
- *      result: <theta1>;<theta2>;<theta3>
+ *      incoming: <id>;move;stop
  * 
- *      incoming: read;status
- *      result: [idle,moving]
+ *      incoming: <id>;read;angles
+ *      result: <id>;<theta1>;<theta2>;<theta3>
  * 
- *      incoming: set;init
- *      result: done
+ *      incoming: <id>;read;status
+ *      result: <id>;[idle,moving]
+ * 
+ *      incoming: <id>;set;init
+ *      result: <id>;done
  */
 
 void setup() {
@@ -48,7 +51,7 @@ void setup() {
     init_angles[0] = 180;
     init_angles[1] = 0;
     init_angles[2] = 0;
-    robot1 = new Robot(1, 5, 2, init_angles);
+    robot1 = new Robot(1, 5, ROBOTS_NUM, init_angles);
     Serial.print("Setup");
 
     // RobotInstruction cmd1;
@@ -251,6 +254,55 @@ void setup() {
     robot1->newCmd(cmd19);
 }
 
+RobotInstruction parse_move(char input[])
+{
+    RobotInstruction result;
+    result.enabled = true;
+
+    int i = 0;                        // counter for number of tokens
+    char *token = strtok(input, ";"); // split the string into tokens
+    while (token != NULL)             // stop if the tokenizer returns NULL, then the string is over
+    {
+        switch (i) {
+            case 0: break;
+            case 1: break;
+            case 2:
+                result.exact = (!strncasecmp(token, "true", 5) ? true : false);
+                break;
+            case 3:
+                result.motor1.angle = atoi(token);
+                break;
+            case 4:
+                result.motor1.speed = atoi(token);
+                break;
+            case 5:
+                result.motor2.angle = atoi(token);
+                break;
+            case 6:
+                result.motor2.speed = atoi(token);
+                break;
+            case 7:
+                result.motor3.angle = atoi(token);
+                break;
+            case 8:
+                result.motor3.speed = atoi(token);
+                break;
+            default:
+                result.enabled = false; // if the number of is different (larger) then the string could not be parsed correctly
+                break;
+        }
+
+        ++i;
+
+        if (result.enabled == false) {
+            return result;
+        }
+
+        token = strtok(NULL, ";");
+    }
+    return result;
+}
+
 void loop() {
     //Important commands:
     //mysmartservo.setInitAngle(<id>); //This function used to get the smart servo's angle.
@@ -259,6 +311,22 @@ void loop() {
     //mysmartservo.moveTo(<id>,<angle [degrees]>,<speed [rpm]>); //smart servo moves to the absolute angle.
     //mysmartservo.setBreak(<id>;<release [true,false]>); //set smart servo break status.
     //mysmartservo.getAngleRequest(<id>); //This function used to get the smart servo's angle.
+
+    if (Serial.available()) {
+        char serial_in[INPUT_SIZE];
+        byte serial_size = Serial.readBytes(serial_in, INPUT_SIZE);
+        serial_in[serial_size] = 0; // add 0-terminator to end of string
+        Serial.print("Command recevied: ");
+        Serial.println(serial_in);
+        Serial.println("Parsing...");
+        RobotInstruction cmd = parse_move(serial_in); // parse the incoming command
+        if (cmd.enabled == true) {
+            robot1->newCmd(cmd);
+        } else {
+            Serial.print("Wrong input");
+        }
+        
+    }
 
     robot1->checkCmd();
     Serial.print("Voltage: ");
