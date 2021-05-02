@@ -58,6 +58,8 @@ class Robot{
         void resetSpeeds();
         void stopServos();
         void setInitAngles(float init_angles[3]);
+        float getAngle(int id);
+        bool isRunning();
         DriveInstruction smoothCmd(DriveInstruction cmd, float cur_speed);
         // bool start();
         DriveInstruction getDriveInstruction(int id, RobotInstruction cmd);

@@ -103,6 +103,7 @@ bool Robot::checkCmd() {
 void Robot::setInitAngles(float init_angles[3]) {
     for (int i = 0; i < this->num_servos;i++) {
         this->init_angle[i] = init_angles[i];
+        this->servos->setZero(i+1);
     }
 }
 
@@ -139,6 +140,15 @@ void Robot::stopServos() {
         this->servos->setPwmMove(i,0);
         // this->servos->setBreak(i, true);
     }
+}
+
+float Robot::getAngle(int id) {
+    if (id > this->num_servos) return 0;
+    return this->servos->getAngleRequest(id) + this->init_angle[id-1];
+}
+
+bool Robot::isRunning() {
+    return this->moving;
 }
 
 bool Robot::checkServo(int id, int angle, bool exact) {

@@ -7,7 +7,7 @@ MePort_Sig mePort[17] =
     { UART2_TX, UART2_RX }, { A10, A15 }, {  A9, A14 }, {  A8, A13 }, {  A7, A12 }, 
     //             LIGHT2        LIGHT1        TEMP          SOUND
     { A6,A11 }, {  NC,  A2 }, {  NC,  A3 }, {  NC,  A0 }, {  NC,  A1 },
-    { NC, NC }, { NC, NC },
+    { UART3_TX, UART3_RX }, { NC, NC },
 };
 
 //  MePort_Sig mePort[17] =
@@ -30,18 +30,18 @@ int num_servos[ROBOTS_NUM];
  *      1;move;true;142;10;-29;10
  *      1;move;true;180;10;0;10
  * 
- *      incoming: <id>;move;home;speed
+ *      incoming: <id>;home;speed
  *      result: <id>;done;move;<exact>;<theta1>;<speed1>;<theta2>;<speed2>;<theta3>;<speed3>
  * 
- *      incoming: <id>;move;stop
+ *      incoming: <id>;stop
  * 
- *      incoming: <id>;read;angles
+ *      incoming: <id>;angles
  *      result: <id>;<theta1>;<theta2>;<theta3>
  * 
- *      incoming: <id>;read;status
+ *      incoming: <id>;status
  *      result: <id>;[idle,moving]
  * 
- *      incoming: <id>;set;init
+ *      incoming: <id>;init;<theta1>;<theta2>;<theta3>
  *      result: <id>;done
  */
 
@@ -53,7 +53,7 @@ void setup() {
     num_servos[1] = SERVO_NUM_2;
 
     robots[0] = new Robot(1, 5, num_servos[0]);
-    robots[1] = new Robot(2, 6, num_servos[1]);
+    robots[1] = new Robot(2, 15, num_servos[1]);
 
     float init_angles[3];
     init_angles[0] = 180;
@@ -62,13 +62,14 @@ void setup() {
 
     robots[0]->setInitAngles(init_angles);
 
-    Serial.print("DEBUG: Setup");
+    Serial.println("DEBUG: Setup");
 
-    // RobotInstruction cmd1;
-    // cmd1.enabled=true;
-    // cmd1.servo[0].angle = 20;
-    // cmd1.servo[0].speed = 10;
-    // cmd1.exact = true;
+    RobotInstruction cmd0;
+    cmd0.enabled=true;
+    cmd0.servo[0].angle = 100;
+    cmd0.servo[0].speed = 10;
+    cmd0.exact = true;
+    robots[1]->newCmd(cmd0);
     
     // RobotInstruction cmd2;
     // cmd2.enabled=true;
@@ -91,6 +92,8 @@ void setup() {
     // robot1->newCmd(cmd1);
     // robot1->newCmd(cmd2);
     // robot1->newCmd(cmd3);
+
+
 
     RobotInstruction cmd1;
     cmd1.enabled=true;
@@ -264,37 +267,55 @@ void setup() {
     robots[0]->newCmd(cmd19);
 }
 
-RobotInstruction parse_move(char input[])
-{
+void parse_init(char* token, float output[]) {
+    int i = 0;
+    while (token != NULL)
+    {
+        switch (i) {
+            case 0: break;
+            case 1:
+                output[0] = atof(token);
+                break;
+            case 2:
+                output[1] = atof(token);
+                break;
+            case 3:
+                output[2] = atof(token);
+                break;
+        }
+        ++i;
+        token = strtok(NULL, ";");
+    }
+}
+
+RobotInstruction parse_move(char* token) {
     RobotInstruction result;
     result.enabled = true;
-
+    
     int i = 0;                        // counter for number of tokens
-    char *token = strtok(input, ";"); // split the string into tokens
     while (token != NULL)             // stop if the tokenizer returns NULL, then the string is over
     {
         switch (i) {
             case 0: break;
-            case 1: break;
-            case 2:
+            case 1:
                 result.exact = (!strncasecmp(token, "true", 5) ? true : false);
                 break;
-            case 3:
+            case 2:
                 result.servo[0].angle = atoi(token);
                 break;
-            case 4:
+            case 3:
                 result.servo[0].speed = atoi(token);
                 break;
-            case 5:
+            case 4:
                 result.servo[1].angle = atoi(token);
                 break;
-            case 6:
+            case 5:
                 result.servo[1].speed = atoi(token);
                 break;
-            case 7:
+            case 6:
                 result.servo[2].angle = atoi(token);
                 break;
-            case 8:
+            case 7:
                 result.servo[2].speed = atoi(token);
                 break;
             default:
@@ -314,11 +335,26 @@ RobotInstruction parse_move(char input[])
 }
 
 void print_move(int id, RobotInstruction cmd) {
-    Serial.print(id);Serial.print(";done;move;");Serial.print((cmd.exact) ? "true;" : "false;");
+    Serial.print(id);Serial.print(";move;");Serial.print((cmd.exact) ? "true;" : "false;");
     for (int i = 0; i < num_servos[id-1];i++) {
         Serial.print(cmd.servo[i].angle);Serial.print(";");Serial.print(cmd.servo[i].speed);Serial.print(";");
     }
     Serial.println("");
+}
+
+void print_angles(int id, float s1, float s2, float s3, int num) {
+    Serial.print(id);Serial.print(";angles;");Serial.print(s1);
+    if (num > 1) {
+        Serial.print(";");Serial.print(s2);
+    }
+    if (num > 2) {
+        Serial.print(";");Serial.print(s3);
+    }
+    Serial.println(";");
+}
+
+void print_status(int id, bool running) {
+    Serial.print(id);Serial.print(";status;");Serial.println((running) ? "running;" : "idle;");
 }
 
 void loop() {
@@ -331,16 +367,48 @@ void loop() {
     //mysmartservo.getAngleRequest(<id>); //This function used to get the smart servo's angle.
 
     if (Serial.available()) {
+        int robot_index = -1;
         char serial_in[INPUT_SIZE];
         byte serial_size = Serial.readBytes(serial_in, INPUT_SIZE);
         serial_in[serial_size] = 0; // add 0-terminator to end of string
-        RobotInstruction cmd = parse_move(serial_in); // parse the incoming command
-        if (cmd.enabled == true) {
-            robots[0]->newCmd(cmd);
-        } else {
-            Serial.print("DEBUG: Wrong input");
+        int i = 0;                        // counter for number of tokens
+        char *token = strtok(serial_in, ";");
+        while (token != NULL)
+        {
+            if (i==0) {
+                robot_index = atoi(token)-1;
+            } else if (i==1) {
+                if (!strncasecmp(token, "move", 4)) {
+                    RobotInstruction cmd = parse_move(token); // parse the incoming command
+                    if (cmd.enabled == true) {
+                        robots[robot_index]->newCmd(cmd);
+                        // print_move(robot_index+1, cmd);
+                    } else {
+                        Serial.print("DEBUG: Wrong input");
+                    }
+                }
+                else if (!strncasecmp(token, "init", 4)) {
+                    float init_angles[3];
+                    parse_init(token, init_angles);
+                    robots[robot_index]->setInitAngles(init_angles);
+                }
+                else if (!strncasecmp(token, "stop", 4)) {
+                    //Todo: not finished
+                    robots[robot_index]->stopServos();
+                }
+                else if (!strncasecmp(token, "angles", 6)) {
+                    print_angles(robot_index+1, robots[robot_index]->getAngle(1), robots[robot_index]->getAngle(2), 
+                    robots[robot_index]->getAngle(3), num_servos[robot_index]);
+                }
+                else if (!strncasecmp(token, "status", 6)) {
+                    print_status(robot_index+1, robots[robot_index]->isRunning());
+                }
+            } else {
+                break;
+            }
+            ++i;
+            token = strtok(NULL, ";");
         }
-        
     }
 
     for (int i = 0; i < ROBOTS_NUM; i++) {
