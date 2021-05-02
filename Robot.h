@@ -42,8 +42,9 @@ class Robot{
         int write_buffer;
         int read_buffer;
         bool moving;
+        float init_angle[3];
     public:
-        Robot(int id, int port, int num_servos);
+        Robot(int id, int port, int num_servos, float init_angle[3]);
         ~Robot();
         void increase_write_buffer();
         void increase_read_buffer();

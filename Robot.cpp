@@ -1,20 +1,22 @@
 #include "Robot.h"
 
-Robot::Robot(int id, int port, int num_servos) {
+Robot::Robot(int id, int port, int num_servos, float init_angle[3]) {
     this->id = id;
     this->num_servos = num_servos;
     this->write_buffer = 0;
     this->read_buffer = 0;
     this->moving = false;
 
-    this->last_speed[0] = 0.0;
-    this->last_speed[1] = 0.0;
-    this->last_speed[2] = 0.0;
-
     this->servos = new MeSmartServo(port);
     this->servos->begin(115200);
     delay(5);
     this->servos->assignDevIdRequest();
+
+    for (int i = 0; i < this->num_servos;i++) {
+        this->last_speed[i] = 0.0;
+        this->init_angle[i] = init_angle[i];
+        this->servos->setZero(i+1);
+    }
 }
 
 Robot::~Robot() {
@@ -102,7 +104,7 @@ bool Robot::checkAllServo(RobotInstruction cmd) {
     if (this->cmdAvailable() == false) return false;
     for (int i = 1; i <= this->num_servos; i++) {
         DriveInstruction drive = this->getCurrentDriveInstruction(i);
-        if (this->checkServo(i, drive.angle, cmd.exact) == false) {
+        if (this->checkServo(i, drive.angle + this->init_angle[i-1], cmd.exact) == false) {
             return false;
         }
     }
@@ -119,7 +121,7 @@ bool Robot::checkServo(int id, int angle, bool exact) {
 
 bool Robot::driveServo(int id, DriveInstruction cmd) {
     this->moving = true;
-    return this->servos->moveTo(id, cmd.angle, cmd.speed);
+    return this->servos->moveTo(id, cmd.angle + this->init_angle[id-1], cmd.speed);
 }
 
 DriveInstruction Robot::smoothCmd(DriveInstruction cmd, float last_speed) {
