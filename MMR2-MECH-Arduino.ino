@@ -334,9 +334,6 @@ void loop() {
         char serial_in[INPUT_SIZE];
         byte serial_size = Serial.readBytes(serial_in, INPUT_SIZE);
         serial_in[serial_size] = 0; // add 0-terminator to end of string
-        Serial.print("DEBUG: Command recevied: ");
-        Serial.println(serial_in);
-        Serial.println("DEBUG: Parsing...");
         RobotInstruction cmd = parse_move(serial_in); // parse the incoming command
         if (cmd.enabled == true) {
             robots[0]->newCmd(cmd);
@@ -351,10 +348,10 @@ void loop() {
         if (actCmd.enabled == true) {
             print_move(i+1, actCmd);
         }
-        Serial.print("DEBUG: Voltage: ");
-        Serial.println(robots[0]->getServos()->getVoltageRequest(1));
-        Serial.print("DEBUG: Target angle: ");
-        Serial.println(robots[0]->getCurrentDriveInstruction(1).angle);
+        // Serial.print("DEBUG: Voltage: ");
+        // Serial.println(robots[0]->getServos()->getVoltageRequest(1));
+        // Serial.print("DEBUG: Target angle: ");
+        // Serial.println(robots[0]->getCurrentDriveInstruction(1).angle);
     }
 
     

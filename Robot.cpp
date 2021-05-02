@@ -12,6 +12,8 @@ Robot::Robot(int id, int port, int num_servos) {
     delay(5);
     this->servos->assignDevIdRequest();
 
+    this->stopServos();
+
     for (int i = 0; i < this->num_servos;i++) {
         this->last_speed[i] = 0.0;
         this->servos->setZero(i+1);
@@ -150,10 +152,10 @@ bool Robot::checkServo(int id, int angle, bool exact) {
 bool Robot::driveServo(int id, DriveInstruction cmd) {
     this->moving = true;
     // this->servos->setBreak(id, false);
-    Serial.print("DEBUG: Drive Servo: ");Serial.println(id);
-    Serial.print("DEBUG: Angle:  ");Serial.print(cmd.angle);
-    Serial.print("; Cur Ang:");Serial.print(this->servos->getAngleRequest(id)+this->init_angle[id-1]);
-    Serial.print("; Speed:  "); Serial.println(cmd.speed);
+    // Serial.print("DEBUG: Drive Servo: ");Serial.println(id);
+    // Serial.print("DEBUG: Angle:  ");Serial.print(cmd.angle);
+    // Serial.print("; Cur Ang:");Serial.print(this->servos->getAngleRequest(id)+this->init_angle[id-1]);
+    // Serial.print("; Speed:  "); Serial.println(cmd.speed);
     return this->servos->moveTo(id, cmd.angle - this->init_angle[id-1], cmd.speed);
 }
 
@@ -177,15 +179,15 @@ DriveInstruction Robot::smoothCmd(DriveInstruction cmd, float last_speed) {
 }
 
 bool Robot::driveAllServo(RobotInstruction cmd) {
-    Serial.println("DEBUG: Drive All Servo");
+    // Serial.println("DEBUG: Drive All Servo");
     bool success = true;
     for (int i = 1; i <= this->num_servos; i++) {
         DriveInstruction new_cmd = this->smoothCmd(this->getDriveInstruction(i, cmd), this->last_speed[i-1]);
-        Serial.print("DEBUG: Speed last  : ");
-        Serial.println(this->last_speed[i-1]);
+        // Serial.print("DEBUG: Speed last  : ");
+        // Serial.println(this->last_speed[i-1]);
         this->last_speed[i-1] = new_cmd.speed;
-        Serial.print("DEBUG: Speed after : ");
-        Serial.println(new_cmd.speed);
+        // Serial.print("DEBUG: Speed after : ");
+        // Serial.println(new_cmd.speed);
 
         if (this->driveServo(i, new_cmd) == false) {
             success = false;
