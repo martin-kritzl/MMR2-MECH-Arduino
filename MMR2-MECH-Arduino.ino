@@ -62,19 +62,19 @@ void setup() {
 
     // RobotInstruction cmd1;
     // cmd1.enabled=true;
-    // cmd1.motor1.angle = 20;
-    // cmd1.motor1.speed = 10;
+    // cmd1.servo[0].angle = 20;
+    // cmd1.servo[0].speed = 10;
     // cmd1.exact = true;
     
     // RobotInstruction cmd2;
     // cmd2.enabled=true;
-    // cmd2.motor1.angle = -100;
-    // cmd2.motor1.speed = 30;
+    // cmd2.servo[0].angle = -100;
+    // cmd2.servo[0].speed = 30;
 
     // RobotInstruction cmd3;
     // cmd3.enabled=true;
-    // cmd3.motor1.angle = -150;
-    // cmd3.motor1.speed = 10;
+    // cmd3.servo[0].angle = -150;
+    // cmd3.servo[0].speed = 10;
     // cmd3.exact = true;
 
     // robot1->newCmd(cmd1);
@@ -90,172 +90,172 @@ void setup() {
 
     RobotInstruction cmd1;
     cmd1.enabled=true;
-    cmd1.motor1.angle = 180;
-    cmd1.motor1.speed = 3;
-    cmd1.motor2.angle = -4;
-    cmd1.motor2.speed = 3;
+    cmd1.servo[0].angle = 180;
+    cmd1.servo[0].speed = 3;
+    cmd1.servo[1].angle = -4;
+    cmd1.servo[1].speed = 3;
     cmd1.exact = false;
     robots[0]->newCmd(cmd1);
 
     RobotInstruction cmd2;
     cmd2.enabled=true;
-    cmd2.motor1.angle = 177;
-    cmd2.motor1.speed = 20;
-    cmd2.motor2.angle = -6;
-    cmd2.motor2.speed = 0;
+    cmd2.servo[0].angle = 177;
+    cmd2.servo[0].speed = 20;
+    cmd2.servo[1].angle = -6;
+    cmd2.servo[1].speed = 0;
     cmd2.exact = false;
     robots[0]->newCmd(cmd2);
 
     RobotInstruction cmd3;
     cmd3.enabled=true;
-    cmd3.motor1.angle = 175;
-    cmd3.motor1.speed = 20;
-    cmd3.motor2.angle = -8;
-    cmd3.motor2.speed = 0;
+    cmd3.servo[0].angle = 175;
+    cmd3.servo[0].speed = 20;
+    cmd3.servo[1].angle = -8;
+    cmd3.servo[1].speed = 0;
     cmd3.exact = false;
     robots[0]->newCmd(cmd3);
 
     RobotInstruction cmd4;
     cmd4.enabled=true;
-    cmd4.motor1.angle = 173;
-    cmd4.motor1.speed = 20;
-    cmd4.motor2.angle = -10;
-    cmd4.motor2.speed = 5;
+    cmd4.servo[0].angle = 173;
+    cmd4.servo[0].speed = 20;
+    cmd4.servo[1].angle = -10;
+    cmd4.servo[1].speed = 5;
     cmd4.exact = false;
     robots[0]->newCmd(cmd4);
 
     RobotInstruction cmd5;
     cmd5.enabled=true;
-    cmd5.motor1.angle = 170;
-    cmd5.motor1.speed = 20;
-    cmd5.motor2.angle = -12;
-    cmd5.motor2.speed = 1;
+    cmd5.servo[0].angle = 170;
+    cmd5.servo[0].speed = 20;
+    cmd5.servo[1].angle = -12;
+    cmd5.servo[1].speed = 1;
     cmd5.exact = false;
     robots[0]->newCmd(cmd5);
 
     RobotInstruction cmd6;
     cmd6.enabled=true;
-    cmd6.motor1.angle = 168;
-    cmd6.motor1.speed = 20;
-    cmd6.motor2.angle = -14;
-    cmd6.motor2.speed = 6;
+    cmd6.servo[0].angle = 168;
+    cmd6.servo[0].speed = 20;
+    cmd6.servo[1].angle = -14;
+    cmd6.servo[1].speed = 6;
     cmd6.exact = false;
     robots[0]->newCmd(cmd6);
 
     RobotInstruction cmd7;
     cmd7.enabled=true;
-    cmd7.motor1.angle = 166;
-    cmd7.motor1.speed = 20;
-    cmd7.motor2.angle = -15;
-    cmd7.motor2.speed = 10;
+    cmd7.servo[0].angle = 166;
+    cmd7.servo[0].speed = 20;
+    cmd7.servo[1].angle = -15;
+    cmd7.servo[1].speed = 10;
     cmd7.exact = false;
     robots[0]->newCmd(cmd7);
 
     RobotInstruction cmd8;
     cmd8.enabled=true;
-    cmd8.motor1.angle = 163;
-    cmd8.motor1.speed = 20;
-    cmd8.motor2.angle = -17;
-    cmd8.motor2.speed = 0;
+    cmd8.servo[0].angle = 163;
+    cmd8.servo[0].speed = 20;
+    cmd8.servo[1].angle = -17;
+    cmd8.servo[1].speed = 0;
     cmd8.exact = false;
     robots[0]->newCmd(cmd8);
 
     RobotInstruction cmd9;
     cmd9.enabled=true;
-    cmd9.motor1.angle = 161;
-    cmd9.motor1.speed = 20;
-    cmd9.motor2.angle = -19;
-    cmd9.motor2.speed = 2;
+    cmd9.servo[0].angle = 161;
+    cmd9.servo[0].speed = 20;
+    cmd9.servo[1].angle = -19;
+    cmd9.servo[1].speed = 2;
     cmd9.exact = false;
     robots[0]->newCmd(cmd9);
 
     RobotInstruction cmd10;
     cmd10.enabled=true;
-    cmd10.motor1.angle = 159;
-    cmd10.motor1.speed = 20;
-    cmd10.motor2.angle = -20;
-    cmd10.motor2.speed = 13;
+    cmd10.servo[0].angle = 159;
+    cmd10.servo[0].speed = 20;
+    cmd10.servo[1].angle = -20;
+    cmd10.servo[1].speed = 13;
     cmd10.exact = false;
     robots[0]->newCmd(cmd10);
 
     RobotInstruction cmd11;
     cmd11.enabled=true;
-    cmd11.motor1.angle = 157;
-    cmd11.motor1.speed = 12;
-    cmd11.motor2.angle = -21;
-    cmd11.motor2.speed = 14;
+    cmd11.servo[0].angle = 157;
+    cmd11.servo[0].speed = 12;
+    cmd11.servo[1].angle = -21;
+    cmd11.servo[1].speed = 14;
     cmd11.exact = false;
     robots[0]->newCmd(cmd11);
 
     RobotInstruction cmd12;
     cmd12.enabled=true;
-    cmd12.motor1.angle = 154;
-    cmd12.motor1.speed = 9;
-    cmd12.motor2.angle = -23;
-    cmd12.motor2.speed = 20;
+    cmd12.servo[0].angle = 154;
+    cmd12.servo[0].speed = 9;
+    cmd12.servo[1].angle = -23;
+    cmd12.servo[1].speed = 20;
     cmd12.exact = false;
     robots[0]->newCmd(cmd12);
 
     RobotInstruction cmd13;
     cmd13.enabled=true;
-    cmd13.motor1.angle = 152;
-    cmd13.motor1.speed = 0;
-    cmd13.motor2.angle = -24;
-    cmd13.motor2.speed = 0;
+    cmd13.servo[0].angle = 152;
+    cmd13.servo[0].speed = 0;
+    cmd13.servo[1].angle = -24;
+    cmd13.servo[1].speed = 0;
     cmd13.exact = false;
     robots[0]->newCmd(cmd13);
 
     RobotInstruction cmd14;
     cmd14.enabled=true;
-    cmd14.motor1.angle = 150;
-    cmd14.motor1.speed = 16;
-    cmd14.motor2.angle = -25;
-    cmd14.motor2.speed = 2;
+    cmd14.servo[0].angle = 150;
+    cmd14.servo[0].speed = 16;
+    cmd14.servo[1].angle = -25;
+    cmd14.servo[1].speed = 2;
     cmd14.exact = false;
     robots[0]->newCmd(cmd14);
 
     RobotInstruction cmd15;
     cmd15.enabled=true;
-    cmd15.motor1.angle = 148;
-    cmd15.motor1.speed = 20;
-    cmd15.motor2.angle = -26;
-    cmd15.motor2.speed = 0;
+    cmd15.servo[0].angle = 148;
+    cmd15.servo[0].speed = 20;
+    cmd15.servo[1].angle = -26;
+    cmd15.servo[1].speed = 0;
     cmd15.exact = false;
     robots[0]->newCmd(cmd15);
 
     RobotInstruction cmd16;
     cmd16.enabled=true;
-    cmd16.motor1.angle = 146;
-    cmd16.motor1.speed = 14;
-    cmd16.motor2.angle = -28;
-    cmd16.motor2.speed = 2;
+    cmd16.servo[0].angle = 146;
+    cmd16.servo[0].speed = 14;
+    cmd16.servo[1].angle = -28;
+    cmd16.servo[1].speed = 2;
     cmd16.exact = false;
     robots[0]->newCmd(cmd16);
 
     RobotInstruction cmd17;
     cmd17.enabled=true;
-    cmd17.motor1.angle = 144;
-    cmd17.motor1.speed = 20;
-    cmd17.motor2.angle = -28;
-    cmd17.motor2.speed = 0;
+    cmd17.servo[0].angle = 144;
+    cmd17.servo[0].speed = 20;
+    cmd17.servo[1].angle = -28;
+    cmd17.servo[1].speed = 0;
     cmd17.exact = false;
     robots[0]->newCmd(cmd17);
 
     RobotInstruction cmd18;
     cmd18.enabled=true;
-    cmd18.motor1.angle = 142;
-    cmd18.motor1.speed = 12;
-    cmd18.motor2.angle = -29;
-    cmd18.motor2.speed = 2;
+    cmd18.servo[0].angle = 142;
+    cmd18.servo[0].speed = 12;
+    cmd18.servo[1].angle = -29;
+    cmd18.servo[1].speed = 2;
     cmd18.exact = true;
     robots[0]->newCmd(cmd18);
 
     RobotInstruction cmd19;
     cmd19.enabled=true;
-    cmd19.motor1.angle = 180;
-    cmd19.motor1.speed = 10;
-    cmd19.motor2.angle = 0;
-    cmd19.motor2.speed = 10;
+    cmd19.servo[0].angle = 180;
+    cmd19.servo[0].speed = 10;
+    cmd19.servo[1].angle = 0;
+    cmd19.servo[1].speed = 10;
     cmd19.exact = true;
     robots[0]->newCmd(cmd19);
 }
@@ -276,22 +276,22 @@ RobotInstruction parse_move(char input[])
                 result.exact = (!strncasecmp(token, "true", 5) ? true : false);
                 break;
             case 3:
-                result.motor1.angle = atoi(token);
+                result.servo[0].angle = atoi(token);
                 break;
             case 4:
-                result.motor1.speed = atoi(token);
+                result.servo[0].speed = atoi(token);
                 break;
             case 5:
-                result.motor2.angle = atoi(token);
+                result.servo[1].angle = atoi(token);
                 break;
             case 6:
-                result.motor2.speed = atoi(token);
+                result.servo[1].speed = atoi(token);
                 break;
             case 7:
-                result.motor3.angle = atoi(token);
+                result.servo[2].angle = atoi(token);
                 break;
             case 8:
-                result.motor3.speed = atoi(token);
+                result.servo[2].speed = atoi(token);
                 break;
             default:
                 result.enabled = false; // if the number of is different (larger) then the string could not be parsed correctly
@@ -311,7 +311,7 @@ RobotInstruction parse_move(char input[])
 
 void print_move(int id, RobotInstruction cmd) {
     Serial.print(id);Serial.print(";done;move;");Serial.print((cmd.exact) ? "true;" : "false;");
-    Serial.print(cmd.motor1.angle);Serial.print(";");Serial.print(cmd.motor1.speed);Serial.println("");
+    Serial.print(cmd.servo[0].angle);Serial.print(";");Serial.print(cmd.servo[0].speed);Serial.println("");
 }
 
 void loop() {

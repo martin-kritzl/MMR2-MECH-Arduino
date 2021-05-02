@@ -67,14 +67,15 @@ RobotInstruction Robot::finishCurrentRobotInstruction() {
 }
 
 DriveInstruction Robot::getDriveInstruction(int id, RobotInstruction cmd) {
-    switch (id) {
-        case 1: return cmd.motor1;
-            break;
-        case 2: return cmd.motor2;
-            break;
-        case 3: return cmd.motor3;
-            break;
-    }
+    return cmd.servo[id-1];
+    // switch (id) {
+    //     case 1: return cmd.servo[0];
+    //         break;
+    //     case 2: return cmd.servo[1];
+    //         break;
+    //     case 3: return cmd.servo[2];
+    //         break;
+    // }
 }
 
 DriveInstruction Robot::getCurrentDriveInstruction(int id) {

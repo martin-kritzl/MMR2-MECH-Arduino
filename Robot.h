@@ -25,9 +25,7 @@ struct DriveInstruction
  */
 struct RobotInstruction
 {
-    DriveInstruction motor1; ///< Drive command of the first motor
-    DriveInstruction motor2; ///< Drive command of the second motor
-    DriveInstruction motor3; ///< Drive command of the third motor
+    DriveInstruction servo[3];
     bool exact = false;
     bool enabled = false;
 };
