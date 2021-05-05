@@ -56,9 +56,21 @@ void setup() {
     delay(50);                          // must delay over 50ms
 
     robots[0] = new Robot(1, 5);
-    robots[0]->setNumServos(SERVO_NUM_1);
-
     robots[1] = new Robot(2, 15);
+    
+    // Ansonsten stoppen die Servos zu beginn und fahren dann erst an
+    delay(1000);
+
+
+    /**
+     * 
+     * Von hier an kann alles aus der setup Funktion geloescht werden
+     * 
+     */
+
+    // ##### Testsetup:
+
+    robots[0]->setNumServos(SERVO_NUM_1);
     robots[1]->setNumServos(SERVO_NUM_2);
 
     float init_angles[MAX_NUM_SERVOS];
@@ -69,50 +81,9 @@ void setup() {
     robots[0]->setInitAngles(init_angles);
     robots[1]->setInitAngles(init_angles);
 
-    // Ansonsten stoppen die Servos zu beginn und fahren dann erst an
-    delay(1000);
-
     Serial.println("DEBUG: Setup");
 
-    RobotInstruction cmd0;
-    cmd0.enabled=true;
-    cmd0.servo[0].angle = 100;
-    cmd0.servo[0].speed = 10;
-    cmd0.exact = true;
-    robots[1]->newCmd(cmd0);
-    
-    // RobotInstruction cmd2;
-    // cmd2.enabled=true;
-    // cmd2.servo[0].angle = -100;
-    // cmd2.servo[0].speed = 30;
-
-    // RobotInstruction cmd3;
-    // cmd3.enabled=true;
-    // cmd3.servo[0].angle = -150;
-    // cmd3.servo[0].speed = 10;
-    // cmd3.exact = true;
-
-    // robot1->newCmd(cmd1);
-    // robot1->newCmd(cmd2);
-
-    // robot1->newCmd(cmd1);
-    // robot1->newCmd(cmd2);
-    // robot1->newCmd(cmd3);
-
-    // robot1->newCmd(cmd1);
-    // robot1->newCmd(cmd2);
-    // robot1->newCmd(cmd3);
-
-
-    // RobotInstruction cmd1;
-    // cmd1.enabled=true;
-    // cmd1.servo[0].angle = 142;
-    // cmd1.servo[0].speed = 12;
-    // cmd1.servo[1].angle = -29;
-    // cmd1.servo[1].speed = 2;
-    // cmd1.exact = true;
-    // cmd1 = robots[0]->synchronizeServos(cmd1);
-    // robots[0]->newCmd(cmd1);
+    // ##### Erster Test: Pick and Place
 
     RobotInstruction cmd1;
     cmd1.enabled=true;
@@ -168,6 +139,8 @@ void setup() {
     cmd5.speed_smooth = false;
     cmd5.synchronize = true;
     robots[0]->newCmd(cmd5);
+
+    // ##### Zweiter Test: Linearbewegung
 
     // RobotInstruction cmd1;
     // cmd1.enabled=true;
