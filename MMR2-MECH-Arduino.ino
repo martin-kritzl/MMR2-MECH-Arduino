@@ -20,7 +20,6 @@ MePort_Sig mePort[17] =
 // Robot robot1(1, 5, 1);
 
 Robot* robots[ROBOTS_NUM];
-int num_servos[ROBOTS_NUM];
 
 /**
  * Interface:
@@ -49,11 +48,11 @@ void setup() {
     Serial.begin(115200);               // set the data rate for the SoftwareSerial port
     delay(50);                          // must delay over 50ms
 
-    num_servos[0] = SERVO_NUM_1;
-    num_servos[1] = SERVO_NUM_2;
+    robots[0] = new Robot(1, 5);
+    robots[0]->setNumServos(SERVO_NUM_1);
 
-    robots[0] = new Robot(1, 5, num_servos[0]);
-    robots[1] = new Robot(2, 15, num_servos[1]);
+    robots[1] = new Robot(2, 15);
+    robots[1]->setNumServos(SERVO_NUM_2);
 
     float init_angles[3];
     init_angles[0] = 180;
@@ -270,7 +269,7 @@ void setup() {
     robots[0]->newCmd(cmd19);
 }
 
-void parse_init(char* token, float output[]) {
+int parse_init(char* token, float output[]) {
     int i = 0;
     while (token != NULL)
     {
@@ -289,6 +288,7 @@ void parse_init(char* token, float output[]) {
         ++i;
         token = strtok(NULL, ";");
     }
+    return i-1;
 }
 
 RobotInstruction parse_move(char* token) {
@@ -337,9 +337,9 @@ RobotInstruction parse_move(char* token) {
     return result;
 }
 
-void print_move(int id, RobotInstruction cmd) {
+void print_move(int id, RobotInstruction cmd, int num_servos) {
     Serial.print(id);Serial.print(";move;");Serial.print((cmd.exact) ? "true;" : "false;");
-    for (int i = 0; i < num_servos[id-1];i++) {
+    for (int i = 0; i < num_servos;i++) {
         Serial.print(cmd.servo[i].angle);Serial.print(";");Serial.print(cmd.servo[i].speed);Serial.print(";");
     }
     Serial.println("");
@@ -392,7 +392,9 @@ void loop() {
                 }
                 else if (!strncasecmp(token, "init", 4)) {
                     float init_angles[3];
-                    parse_init(token, init_angles);
+                    int num_servos = parse_init(token, init_angles);
+                    Serial.print("Num Angles: ");Serial.println(num_servos);
+                    robots[robot_index]->setNumServos(num_servos);
                     robots[robot_index]->setInitAngles(init_angles);
                 }
                 else if (!strncasecmp(token, "stop", 4)) {
@@ -401,7 +403,7 @@ void loop() {
                 }
                 else if (!strncasecmp(token, "angles", 6)) {
                     print_angles(robot_index+1, robots[robot_index]->getAngle(1), robots[robot_index]->getAngle(2), 
-                    robots[robot_index]->getAngle(3), num_servos[robot_index]);
+                    robots[robot_index]->getAngle(3), robots[robot_index]->getNumServos());
                 }
                 else if (!strncasecmp(token, "status", 6)) {
                     print_status(robot_index+1, robots[robot_index]->isRunning());
@@ -417,7 +419,7 @@ void loop() {
     for (int i = 0; i < ROBOTS_NUM; i++) {
         RobotInstruction actCmd = robots[i]->cmdFinished();
         if (actCmd.enabled == true) {
-            print_move(i+1, actCmd);
+            print_move(i+1, actCmd, robots[i]->getNumServos());
         }
         // Serial.print("DEBUG: Voltage: ");
         // Serial.println(robots[0]->getServos()->getVoltageRequest(1));

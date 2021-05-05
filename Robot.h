@@ -42,7 +42,7 @@ class Robot{
         bool moving;
         float init_angle[3];
     public:
-        Robot(int id, int port, int num_servos);
+        Robot(int id, int port);
         ~Robot();
         void increase_write_buffer();
         void increase_read_buffer();
@@ -65,6 +65,9 @@ class Robot{
         DriveInstruction getDriveInstruction(int id, RobotInstruction cmd);
         DriveInstruction getCurrentDriveInstruction(int id);
         RobotInstruction getCurrentRobotInstruction();
+
+        void setNumServos(int num_servos);
+        int getNumServos();
 
         MeSmartServo* getServos();
 };

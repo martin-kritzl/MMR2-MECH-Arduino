@@ -1,8 +1,8 @@
 #include "Robot.h"
 
-Robot::Robot(int id, int port, int num_servos) {
+Robot::Robot(int id, int port) {
     this->id = id;
-    this->num_servos = num_servos;
+    this->num_servos = 0;
     this->write_buffer = 0;
     this->read_buffer = 0;
     this->moving = false;
@@ -102,6 +102,7 @@ bool Robot::checkCmd() {
 
 void Robot::setInitAngles(float init_angles[3]) {
     for (int i = 0; i < this->num_servos;i++) {
+        Serial.println(init_angle[i]);
         this->init_angle[i] = init_angles[i];
         this->servos->setZero(i+1);
     }
@@ -160,10 +161,10 @@ bool Robot::checkServo(int id, int angle, bool exact) {
 
 bool Robot::driveServo(int id, DriveInstruction cmd) {
     this->moving = true;
-    if (id == 1 && this->id == 1) {
-        Serial.print("Angle: ");Serial.print(cmd.angle - this->init_angle[id-1]);
-        Serial.print("; Speed: ");Serial.println(cmd.speed);
-    }
+    // if (id == 1 && this->id == 1) {
+    //     Serial.print("Angle: ");Serial.print(cmd.angle - this->init_angle[id-1]);
+    //     Serial.print("; Speed: ");Serial.println(cmd.speed);
+    // }
     // this->servos->setBreak(id, false);
     // Serial.print("DEBUG: Drive Servo: ");Serial.println(id);
     // Serial.print("DEBUG: Angle:  ");Serial.print(cmd.angle);
@@ -219,6 +220,13 @@ bool Robot::driveAllServo(RobotInstruction cmd) {
     return success;
 }
 
+void Robot::setNumServos(int num_servos) {
+    this->num_servos = num_servos;
+}
+
+int Robot::getNumServos() {
+    return this->num_servos;
+}
 
 MeSmartServo* Robot::getServos() {
     return this->servos;
