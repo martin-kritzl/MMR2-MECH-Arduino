@@ -70,75 +70,75 @@ void setup() {
 
     // ##### Testsetup:
 
-    robots[0]->setNumServos(SERVO_NUM_1);
-    robots[1]->setNumServos(SERVO_NUM_2);
+    // robots[0]->setNumServos(SERVO_NUM_1);
+    // robots[1]->setNumServos(SERVO_NUM_2);
 
-    float init_angles[MAX_NUM_SERVOS];
-    init_angles[0] = 180;
-    init_angles[1] = 0;
-    init_angles[2] = 0;
+    // float init_angles[MAX_NUM_SERVOS];
+    // init_angles[0] = 180;
+    // init_angles[1] = 0;
+    // init_angles[2] = 0;
 
-    robots[0]->setInitAngles(init_angles);
-    robots[1]->setInitAngles(init_angles);
+    // robots[0]->setInitAngles(init_angles);
+    // robots[1]->setInitAngles(init_angles);
 
-    Serial.println("DEBUG: Setup");
+    // Serial.println("DEBUG: Setup");
 
-    // ##### Erster Test: Pick and Place
+    // // ##### Erster Test: Pick and Place
 
-    RobotInstruction cmd1;
-    cmd1.enabled=true;
-    cmd1.servo[0].angle = 132;
-    cmd1.servo[0].speed = 20;
-    cmd1.servo[1].angle = 0;
-    cmd1.servo[1].speed = 10;
-    cmd1.exact = true;
-    cmd1.speed_smooth = false;
-    cmd1.synchronize = true;
-    robots[0]->newCmd(cmd1);
+    // RobotInstruction cmd1;
+    // cmd1.enabled=true;
+    // cmd1.servo[0].angle = 132;
+    // cmd1.servo[0].speed = 20;
+    // cmd1.servo[1].angle = 0;
+    // cmd1.servo[1].speed = 10;
+    // cmd1.exact = true;
+    // cmd1.speed_smooth = false;
+    // cmd1.synchronize = true;
+    // robots[0]->newCmd(cmd1);
 
-    RobotInstruction cmd2;
-    cmd2.enabled=true;
-    cmd2.servo[0].angle = 138;
-    cmd2.servo[0].speed = 20;
-    cmd2.servo[1].angle = -35;
-    cmd2.servo[1].speed = 10;
-    cmd2.exact = true;
-    cmd2.speed_smooth = false;
-    cmd2.synchronize = true;
-    robots[0]->newCmd(cmd2);
+    // RobotInstruction cmd2;
+    // cmd2.enabled=true;
+    // cmd2.servo[0].angle = 138;
+    // cmd2.servo[0].speed = 20;
+    // cmd2.servo[1].angle = -35;
+    // cmd2.servo[1].speed = 10;
+    // cmd2.exact = true;
+    // cmd2.speed_smooth = false;
+    // cmd2.synchronize = true;
+    // robots[0]->newCmd(cmd2);
 
-    RobotInstruction cmd3;
-    cmd3.enabled=true;
-    cmd3.servo[0].angle = 216;
-    cmd3.servo[0].speed = 20;
-    cmd3.servo[1].angle = 35;
-    cmd3.servo[1].speed = 10;
-    cmd3.exact = true;
-    cmd3.speed_smooth = false;
-    cmd3.synchronize = true;
-    robots[0]->newCmd(cmd3);
+    // RobotInstruction cmd3;
+    // cmd3.enabled=true;
+    // cmd3.servo[0].angle = 216;
+    // cmd3.servo[0].speed = 20;
+    // cmd3.servo[1].angle = 35;
+    // cmd3.servo[1].speed = 10;
+    // cmd3.exact = true;
+    // cmd3.speed_smooth = false;
+    // cmd3.synchronize = true;
+    // robots[0]->newCmd(cmd3);
 
-    RobotInstruction cmd4;
-    cmd4.enabled=true;
-    cmd4.servo[0].angle = 180;
-    cmd4.servo[0].speed = 20;
-    cmd4.servo[1].angle = 43;
-    cmd4.servo[1].speed = 10;
-    cmd4.exact = true;
-    cmd4.speed_smooth = false;
-    cmd4.synchronize = true;
-    robots[0]->newCmd(cmd4);
+    // RobotInstruction cmd4;
+    // cmd4.enabled=true;
+    // cmd4.servo[0].angle = 180;
+    // cmd4.servo[0].speed = 20;
+    // cmd4.servo[1].angle = 43;
+    // cmd4.servo[1].speed = 10;
+    // cmd4.exact = true;
+    // cmd4.speed_smooth = false;
+    // cmd4.synchronize = true;
+    // robots[0]->newCmd(cmd4);
 
-    RobotInstruction cmd5;
-    cmd5.enabled=true;
-    cmd5.servo[0].angle = 180;
-    cmd5.servo[0].speed = 20;
-    cmd5.servo[1].angle = 0;
-    cmd5.servo[1].speed = 10;
-    cmd5.exact = true;
-    cmd5.speed_smooth = false;
-    cmd5.synchronize = true;
-    robots[0]->newCmd(cmd5);
+    // RobotInstruction cmd5;
+    // cmd5.enabled=true;
+    // cmd5.servo[0].angle = 180;
+    // cmd5.servo[0].speed = 20;
+    // cmd5.servo[1].angle = 0;
+    // cmd5.servo[1].speed = 10;
+    // cmd5.exact = true;
+    // cmd5.speed_smooth = false;
+    // cmd5.synchronize = true;
+    // robots[0]->newCmd(cmd5);
 
     // ##### Zweiter Test: Linearbewegung
 
