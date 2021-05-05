@@ -160,6 +160,10 @@ bool Robot::checkServo(int id, int angle, bool exact) {
 
 bool Robot::driveServo(int id, DriveInstruction cmd) {
     this->moving = true;
+    if (id == 1 && this->id == 1) {
+        Serial.print("Angle: ");Serial.print(cmd.angle - this->init_angle[id-1]);
+        Serial.print("; Speed: ");Serial.println(cmd.speed);
+    }
     // this->servos->setBreak(id, false);
     // Serial.print("DEBUG: Drive Servo: ");Serial.println(id);
     // Serial.print("DEBUG: Angle:  ");Serial.print(cmd.angle);
@@ -170,19 +174,23 @@ bool Robot::driveServo(int id, DriveInstruction cmd) {
 
 DriveInstruction Robot::smoothCmd(DriveInstruction cmd, float last_speed) {
     DriveInstruction new_drive;
-    if (abs(last_speed) < SPEED_MIN) {
-        last_speed = SPEED_MIN;
-    } else if (abs(last_speed) > cmd.speed) {
-        last_speed -= SPEED_INCREMENT;
-    } else {
-        last_speed += SPEED_INCREMENT;
-        if (last_speed > cmd.speed) {
-            last_speed = cmd.speed;
-        }
-    }
-    
     new_drive.angle = cmd.angle;
-    new_drive.speed = last_speed;
+
+    if (last_speed == cmd.speed) {
+        new_drive.speed = last_speed;
+    } else if (last_speed+SPEED_INCREMENT <= cmd.speed) {
+        new_drive.speed = last_speed+SPEED_INCREMENT;
+    } else if (last_speed < cmd.speed) {
+        new_drive.speed = cmd.speed;
+    } else if (last_speed-SPEED_INCREMENT >= cmd.speed) {
+        new_drive.speed = last_speed-SPEED_INCREMENT;
+    } else if (last_speed > cmd.speed) {
+        new_drive.speed = cmd.speed;
+    }
+
+    if (new_drive.speed < SPEED_MIN) {
+        new_drive.speed = SPEED_MIN;
+    }
 
     return new_drive;
 }
@@ -192,12 +200,18 @@ bool Robot::driveAllServo(RobotInstruction cmd) {
     bool success = true;
     for (int i = 1; i <= this->num_servos; i++) {
         DriveInstruction new_cmd = this->smoothCmd(this->getDriveInstruction(i, cmd), this->last_speed[i-1]);
-        // Serial.print("DEBUG: Speed last  : ");
-        // Serial.println(this->last_speed[i-1]);
-        this->last_speed[i-1] = new_cmd.speed;
-        // Serial.print("DEBUG: Speed after : ");
-        // Serial.println(new_cmd.speed);
 
+        // if (i == 1 && this->id == 1) {
+        //     Serial.print("DEBUG: Speed target  : ");
+        //     Serial.println(cmd.servo[i-1].speed);
+        //     Serial.print("DEBUG: Speed last  : ");
+        //     Serial.println(this->last_speed[i-1]);
+        //     Serial.print("DEBUG: Speed after : ");
+        //     Serial.println(new_cmd.speed);
+        // }
+
+        this->last_speed[i-1] = new_cmd.speed;
+        
         if (this->driveServo(i, new_cmd) == false) {
             success = false;
         }

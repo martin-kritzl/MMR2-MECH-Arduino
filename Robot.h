@@ -4,10 +4,10 @@
 #include "MeSmartServo.h"
 
 #define BUFFER_LEN 20
-#define ANGLE_TOLERANCE 5
+#define ANGLE_TOLERANCE 7
 #define ANGLE_TOLERANCE_EXACT 2
-#define SPEED_MIN 4.5
-#define SPEED_INCREMENT 0.1
+#define SPEED_MIN 5
+#define SPEED_INCREMENT 0.8
 
 /** 
  * @struct DriveInstruction

@@ -62,6 +62,9 @@ void setup() {
 
     robots[0]->setInitAngles(init_angles);
 
+    // Ansonsten stoppen die Servos zu beginn und fahren dann erst an
+    delay(1000);
+
     Serial.println("DEBUG: Setup");
 
     RobotInstruction cmd0;
