@@ -100,7 +100,7 @@ bool Robot::checkCmd() {
     return true;
 }
 
-void Robot::setInitAngles(float init_angles[3]) {
+void Robot::setInitAngles(float init_angles[]) {
     for (int i = 0; i < this->num_servos;i++) {
         Serial.println(init_angle[i]);
         this->init_angle[i] = init_angles[i];
@@ -145,6 +145,12 @@ void Robot::stopServos() {
 float Robot::getAngle(int id) {
     if (id > this->num_servos) return 0;
     return this->servos->getAngleRequest(id) + this->init_angle[id-1];
+}
+
+void Robot::getAngles(float angles[]) {
+    for (int i = 0; i < this->num_servos; i++) {
+        angles[i] = this->servos->getAngleRequest(i+1) + this->init_angle[i];
+    }
 }
 
 bool Robot::isRunning() {

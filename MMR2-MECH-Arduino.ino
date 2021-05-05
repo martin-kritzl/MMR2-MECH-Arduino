@@ -54,7 +54,7 @@ void setup() {
     robots[1] = new Robot(2, 15);
     robots[1]->setNumServos(SERVO_NUM_2);
 
-    float init_angles[3];
+    float init_angles[MAX_NUM_SERVOS];
     init_angles[0] = 180;
     init_angles[1] = 0;
     init_angles[2] = 0;
@@ -345,15 +345,11 @@ void print_move(int id, RobotInstruction cmd, int num_servos) {
     Serial.println("");
 }
 
-void print_angles(int id, float s1, float s2, float s3, int num) {
-    Serial.print(id);Serial.print(";angles;");Serial.print(s1);
-    if (num > 1) {
-        Serial.print(";");Serial.print(s2);
+void print_angles(int id, float angles[], int num) {
+    Serial.print(id);Serial.print(";angles;");
+    for (int i = 0; i < num; i++) {
+        Serial.print(angles[i]);Serial.print(";");
     }
-    if (num > 2) {
-        Serial.print(";");Serial.print(s3);
-    }
-    Serial.println(";");
 }
 
 void print_status(int id, bool running) {
@@ -391,7 +387,7 @@ void loop() {
                     }
                 }
                 else if (!strncasecmp(token, "init", 4)) {
-                    float init_angles[3];
+                    float init_angles[MAX_NUM_SERVOS];
                     int num_servos = parse_init(token, init_angles);
                     Serial.print("Num Angles: ");Serial.println(num_servos);
                     robots[robot_index]->setNumServos(num_servos);
@@ -402,8 +398,9 @@ void loop() {
                     robots[robot_index]->stopServos();
                 }
                 else if (!strncasecmp(token, "angles", 6)) {
-                    print_angles(robot_index+1, robots[robot_index]->getAngle(1), robots[robot_index]->getAngle(2), 
-                    robots[robot_index]->getAngle(3), robots[robot_index]->getNumServos());
+                    float angles[MAX_NUM_SERVOS];
+                    robots[robot_index]->getAngles(angles);
+                    print_angles(robot_index+1, angles, robots[robot_index]->getNumServos());
                 }
                 else if (!strncasecmp(token, "status", 6)) {
                     print_status(robot_index+1, robots[robot_index]->isRunning());

@@ -3,7 +3,9 @@
 
 #include "MeSmartServo.h"
 
+#define MAX_NUM_SERVOS 3
 #define BUFFER_LEN 20
+
 #define ANGLE_TOLERANCE 7
 #define ANGLE_TOLERANCE_EXACT 2
 #define SPEED_MIN 5
@@ -25,7 +27,7 @@ struct DriveInstruction
  */
 struct RobotInstruction
 {
-    DriveInstruction servo[3];
+    DriveInstruction servo[MAX_NUM_SERVOS];
     bool exact = false;
     bool enabled = false;
 };
@@ -36,11 +38,11 @@ class Robot{
         int num_servos;
         MeSmartServo *servos;
         RobotInstruction move_buffer[BUFFER_LEN];
-        float last_speed[3];
+        float last_speed[MAX_NUM_SERVOS];
         int write_buffer;
         int read_buffer;
         bool moving;
-        float init_angle[3];
+        float init_angle[MAX_NUM_SERVOS];
     public:
         Robot(int id, int port);
         ~Robot();
@@ -57,8 +59,9 @@ class Robot{
         RobotInstruction cmdFinished();
         void resetSpeeds();
         void stopServos();
-        void setInitAngles(float init_angles[3]);
+        void setInitAngles(float init_angles[]);
         float getAngle(int id);
+        void getAngles(float angles[]);
         bool isRunning();
         DriveInstruction smoothCmd(DriveInstruction cmd, float cur_speed);
         // bool start();
