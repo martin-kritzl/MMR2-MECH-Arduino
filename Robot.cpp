@@ -153,6 +153,34 @@ void Robot::getAngles(float angles[]) {
     }
 }
 
+RobotInstruction Robot::synchronizeServos(RobotInstruction cmd) {
+    float diff_angles[this->num_servos];
+    float act_angles[this->num_servos];
+    this->getAngles(act_angles);
+    float delta_max = 0;
+    for (int i = 0; i < this->num_servos; i++) {
+        diff_angles[i] = fabs(cmd.servo[i].angle - act_angles[i]);
+        // Serial.print(i);Serial.print(" Diff: ");Serial.println(diff_angles[i]);
+        if (diff_angles[i] > delta_max) {
+            delta_max = diff_angles[i];
+        }
+    }
+
+    if (delta_max>0) {
+        //Noetige Zeit wird berechnet
+        double time = delta_max/cmd.servo[0].speed;
+        // Serial.print("Diff max: ");Serial.println(delta_max);
+        // Serial.print("time: ");Serial.println(time);
+
+        for (int i = 0; i < this->num_servos; i++) {
+            cmd.servo[i].speed = diff_angles[i]/time;
+            // Serial.print(i);Serial.print(" Speed: ");Serial.println(cmd.servo[i].speed);
+        }
+    }
+
+    return cmd;
+}
+
 bool Robot::isRunning() {
     return this->moving;
 }

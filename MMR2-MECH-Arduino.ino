@@ -60,6 +60,7 @@ void setup() {
     init_angles[2] = 0;
 
     robots[0]->setInitAngles(init_angles);
+    robots[1]->setInitAngles(init_angles);
 
     // Ansonsten stoppen die Servos zu beginn und fahren dann erst an
     delay(1000);
@@ -96,6 +97,15 @@ void setup() {
     // robot1->newCmd(cmd3);
 
 
+    // RobotInstruction cmd1;
+    // cmd1.enabled=true;
+    // cmd1.servo[0].angle = 142;
+    // cmd1.servo[0].speed = 12;
+    // cmd1.servo[1].angle = -29;
+    // cmd1.servo[1].speed = 2;
+    // cmd1.exact = true;
+    // cmd1 = robots[0]->synchronizeServos(cmd1);
+    // robots[0]->newCmd(cmd1);
 
     RobotInstruction cmd1;
     cmd1.enabled=true;

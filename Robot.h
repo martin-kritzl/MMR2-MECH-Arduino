@@ -64,6 +64,7 @@ class Robot{
         void getAngles(float angles[]);
         bool isRunning();
         DriveInstruction smoothCmd(DriveInstruction cmd, float cur_speed);
+        RobotInstruction synchronizeServos(RobotInstruction cmd);
         // bool start();
         DriveInstruction getDriveInstruction(int id, RobotInstruction cmd);
         DriveInstruction getCurrentDriveInstruction(int id);
