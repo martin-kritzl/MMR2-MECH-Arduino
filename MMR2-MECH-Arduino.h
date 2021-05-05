@@ -5,7 +5,7 @@
 #define ROBOTS_NUM 2
 #define SERVO_NUM_1 2
 #define SERVO_NUM_2 1
-#define INPUT_SIZE 30
+#define INPUT_SIZE 50
 
 #define UART1_TX 18
 #define UART1_RX 19

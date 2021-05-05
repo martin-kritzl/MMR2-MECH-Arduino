@@ -29,6 +29,8 @@ struct RobotInstruction
 {
     DriveInstruction servo[MAX_NUM_SERVOS];
     bool exact = false;
+    bool speed_smooth = false;
+    bool synchronize = false;
     bool enabled = false;
 };
 

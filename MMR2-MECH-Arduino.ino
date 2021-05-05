@@ -23,11 +23,18 @@ Robot* robots[ROBOTS_NUM];
 
 /**
  * Interface:
- *      incoming: <id>;move;<exact>;<theta1>;<speed1>;<theta2>;<speed2>;<theta3>;<speed3>
- *      result: <id>;done;move;<exact>;<theta1>;<speed1>;<theta2>;<speed2>;<theta3>;<speed3>
+ *      incoming: <id>;move;<theta1>;<speed1>;<theta2>;<speed2>;<theta3>;<speed3>
+ *      result: <id>;move;true;false;false;<theta1>;<speed1>;<theta2>;<speed2>;<theta3>;<speed3>
+ *      note: same as moveAdv (exact=true;speed_smooth=false;synchronize=false)
  * 
- *      1;move;true;142;10;-29;10
- *      1;move;true;180;10;0;10
+ *      1;move;142;10;-29;10
+ *      1;move;180;10;0;10
+ * 
+ *      incoming: <id>;moveAdv;<exact>;<speed_smooth>;<synchronize>;<theta1>;<speed1>;<theta2>;<speed2>;<theta3>;<speed3>
+ *      result: <id>;move;<exact>;<speed_smooth>;<synchronize>;<theta1>;<speed1>;<theta2>;<speed2>;<theta3>;<speed3>
+ * 
+ *      1;moveAdv;true;true;true;142;10;-29;10
+ *      1;moveAdv;true;true;true;180;10;0;10
  * 
  *      incoming: <id>;home;speed
  *      result: <id>;done;move;<exact>;<theta1>;<speed1>;<theta2>;<speed2>;<theta3>;<speed3>
@@ -114,6 +121,7 @@ void setup() {
     cmd1.servo[1].angle = -4;
     cmd1.servo[1].speed = 3;
     cmd1.exact = false;
+    cmd1.speed_smooth = true;
     robots[0]->newCmd(cmd1);
 
     RobotInstruction cmd2;
@@ -123,6 +131,7 @@ void setup() {
     cmd2.servo[1].angle = -6;
     cmd2.servo[1].speed = 0;
     cmd2.exact = false;
+    cmd2.speed_smooth = true;
     robots[0]->newCmd(cmd2);
 
     RobotInstruction cmd3;
@@ -132,6 +141,7 @@ void setup() {
     cmd3.servo[1].angle = -8;
     cmd3.servo[1].speed = 0;
     cmd3.exact = false;
+    cmd3.speed_smooth = true;
     robots[0]->newCmd(cmd3);
 
     RobotInstruction cmd4;
@@ -141,6 +151,7 @@ void setup() {
     cmd4.servo[1].angle = -10;
     cmd4.servo[1].speed = 5;
     cmd4.exact = false;
+    cmd4.speed_smooth = true;
     robots[0]->newCmd(cmd4);
 
     RobotInstruction cmd5;
@@ -150,6 +161,7 @@ void setup() {
     cmd5.servo[1].angle = -12;
     cmd5.servo[1].speed = 1;
     cmd5.exact = false;
+    cmd5.speed_smooth = true;
     robots[0]->newCmd(cmd5);
 
     RobotInstruction cmd6;
@@ -159,6 +171,7 @@ void setup() {
     cmd6.servo[1].angle = -14;
     cmd6.servo[1].speed = 6;
     cmd6.exact = false;
+    cmd6.speed_smooth = true;
     robots[0]->newCmd(cmd6);
 
     RobotInstruction cmd7;
@@ -168,6 +181,7 @@ void setup() {
     cmd7.servo[1].angle = -15;
     cmd7.servo[1].speed = 10;
     cmd7.exact = false;
+    cmd7.speed_smooth = true;
     robots[0]->newCmd(cmd7);
 
     RobotInstruction cmd8;
@@ -177,6 +191,7 @@ void setup() {
     cmd8.servo[1].angle = -17;
     cmd8.servo[1].speed = 0;
     cmd8.exact = false;
+    cmd8.speed_smooth = true;
     robots[0]->newCmd(cmd8);
 
     RobotInstruction cmd9;
@@ -186,6 +201,7 @@ void setup() {
     cmd9.servo[1].angle = -19;
     cmd9.servo[1].speed = 2;
     cmd9.exact = false;
+    cmd9.speed_smooth = true;
     robots[0]->newCmd(cmd9);
 
     RobotInstruction cmd10;
@@ -195,6 +211,7 @@ void setup() {
     cmd10.servo[1].angle = -20;
     cmd10.servo[1].speed = 13;
     cmd10.exact = false;
+    cmd10.speed_smooth = true;
     robots[0]->newCmd(cmd10);
 
     RobotInstruction cmd11;
@@ -204,6 +221,7 @@ void setup() {
     cmd11.servo[1].angle = -21;
     cmd11.servo[1].speed = 14;
     cmd11.exact = false;
+    cmd11.speed_smooth = true;
     robots[0]->newCmd(cmd11);
 
     RobotInstruction cmd12;
@@ -213,6 +231,7 @@ void setup() {
     cmd12.servo[1].angle = -23;
     cmd12.servo[1].speed = 20;
     cmd12.exact = false;
+    cmd12.speed_smooth = true;
     robots[0]->newCmd(cmd12);
 
     RobotInstruction cmd13;
@@ -222,6 +241,7 @@ void setup() {
     cmd13.servo[1].angle = -24;
     cmd13.servo[1].speed = 0;
     cmd13.exact = false;
+    cmd13.speed_smooth = true;
     robots[0]->newCmd(cmd13);
 
     RobotInstruction cmd14;
@@ -231,6 +251,7 @@ void setup() {
     cmd14.servo[1].angle = -25;
     cmd14.servo[1].speed = 2;
     cmd14.exact = false;
+    cmd14.speed_smooth = true;
     robots[0]->newCmd(cmd14);
 
     RobotInstruction cmd15;
@@ -240,6 +261,7 @@ void setup() {
     cmd15.servo[1].angle = -26;
     cmd15.servo[1].speed = 0;
     cmd15.exact = false;
+    cmd15.speed_smooth = true;
     robots[0]->newCmd(cmd15);
 
     RobotInstruction cmd16;
@@ -249,6 +271,7 @@ void setup() {
     cmd16.servo[1].angle = -28;
     cmd16.servo[1].speed = 2;
     cmd16.exact = false;
+    cmd16.speed_smooth = true;
     robots[0]->newCmd(cmd16);
 
     RobotInstruction cmd17;
@@ -258,6 +281,7 @@ void setup() {
     cmd17.servo[1].angle = -28;
     cmd17.servo[1].speed = 0;
     cmd17.exact = false;
+    cmd17.speed_smooth = true;
     robots[0]->newCmd(cmd17);
 
     RobotInstruction cmd18;
@@ -267,6 +291,7 @@ void setup() {
     cmd18.servo[1].angle = -29;
     cmd18.servo[1].speed = 2;
     cmd18.exact = true;
+    cmd18.speed_smooth = true;
     robots[0]->newCmd(cmd18);
 
     RobotInstruction cmd19;
@@ -276,6 +301,8 @@ void setup() {
     cmd19.servo[1].angle = 0;
     cmd19.servo[1].speed = 10;
     cmd19.exact = true;
+    cmd19.speed_smooth = true;
+    cmd19.synchronize = true;
     robots[0]->newCmd(cmd19);
 }
 
@@ -304,6 +331,10 @@ int parse_init(char* token, float output[]) {
 RobotInstruction parse_move(char* token) {
     RobotInstruction result;
     result.enabled = true;
+
+    result.exact = true;
+    result.speed_smooth = false;
+    result.synchronize = false;
     
     int i = 0;                        // counter for number of tokens
     while (token != NULL)             // stop if the tokenizer returns NULL, then the string is over
@@ -311,24 +342,73 @@ RobotInstruction parse_move(char* token) {
         switch (i) {
             case 0: break;
             case 1:
-                result.exact = (!strncasecmp(token, "true", 5) ? true : false);
-                break;
-            case 2:
                 result.servo[0].angle = atoi(token);
                 break;
-            case 3:
+            case 2:
                 result.servo[0].speed = atoi(token);
                 break;
-            case 4:
+            case 3:
                 result.servo[1].angle = atoi(token);
                 break;
-            case 5:
+            case 4:
                 result.servo[1].speed = atoi(token);
                 break;
-            case 6:
+            case 5:
                 result.servo[2].angle = atoi(token);
                 break;
+            case 6:
+                result.servo[2].speed = atoi(token);
+                break;
+            default:
+                result.enabled = false; // if the number of is different (larger) then the string could not be parsed correctly
+                break;
+        }
+
+        ++i;
+
+        if (result.enabled == false) {
+            return result;
+        }
+
+        token = strtok(NULL, ";");
+    }
+    return result;
+}
+
+RobotInstruction parse_moveAdv(char* token) {
+    RobotInstruction result;
+    result.enabled = true;
+    
+    int i = 0;                        // counter for number of tokens
+    while (token != NULL)             // stop if the tokenizer returns NULL, then the string is over
+    {
+        switch (i) {
+            case 0: break;
+            case 1:
+                result.exact = (!strncasecmp(token, "true", 4) ? true : false);
+                break;
+            case 2:
+                result.speed_smooth = (!strncasecmp(token, "true", 4) ? true : false);
+                break;
+            case 3:
+                result.synchronize = (!strncasecmp(token, "true", 4) ? true : false);
+                break;
+            case 4:
+                result.servo[0].angle = atoi(token);
+                break;
+            case 5:
+                result.servo[0].speed = atoi(token);
+                break;
+            case 6:
+                result.servo[1].angle = atoi(token);
+                break;
             case 7:
+                result.servo[1].speed = atoi(token);
+                break;
+            case 8:
+                result.servo[2].angle = atoi(token);
+                break;
+            case 9:
                 result.servo[2].speed = atoi(token);
                 break;
             default:
@@ -348,7 +428,10 @@ RobotInstruction parse_move(char* token) {
 }
 
 void print_move(int id, RobotInstruction cmd, int num_servos) {
-    Serial.print(id);Serial.print(";move;");Serial.print((cmd.exact) ? "true;" : "false;");
+    Serial.print(id);Serial.print(";move;");
+    Serial.print((cmd.exact) ? "true;" : "false;");
+    Serial.print((cmd.speed_smooth) ? "true;" : "false;");
+    Serial.print((cmd.synchronize) ? "true;" : "false;");
     for (int i = 0; i < num_servos;i++) {
         Serial.print(cmd.servo[i].angle);Serial.print(";");Serial.print(cmd.servo[i].speed);Serial.print(";");
     }
@@ -387,11 +470,18 @@ void loop() {
             if (i==0) {
                 robot_index = atoi(token)-1;
             } else if (i==1) {
-                if (!strncasecmp(token, "move", 4)) {
+                if (!strncasecmp(token, "moveAdv", 7)) {
+                    RobotInstruction cmd = parse_moveAdv(token); // parse the incoming command
+                    if (cmd.enabled == true) {
+                        robots[robot_index]->newCmd(cmd);
+                    } else {
+                        Serial.print("DEBUG: Wrong input");
+                    }
+                }
+                else if (!strncasecmp(token, "move", 4)) {
                     RobotInstruction cmd = parse_move(token); // parse the incoming command
                     if (cmd.enabled == true) {
                         robots[robot_index]->newCmd(cmd);
-                        // print_move(robot_index+1, cmd);
                     } else {
                         Serial.print("DEBUG: Wrong input");
                     }
@@ -399,7 +489,6 @@ void loop() {
                 else if (!strncasecmp(token, "init", 4)) {
                     float init_angles[MAX_NUM_SERVOS];
                     int num_servos = parse_init(token, init_angles);
-                    Serial.print("Num Angles: ");Serial.println(num_servos);
                     robots[robot_index]->setNumServos(num_servos);
                     robots[robot_index]->setInitAngles(init_angles);
                 }
