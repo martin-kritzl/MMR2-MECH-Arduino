@@ -37,7 +37,7 @@ bool Robot::cmdAvailable() {
 }
 
 bool Robot::newCmd(RobotInstruction cmd) {
-    if (this->move_buffer[this->write_buffer].enabled == true) {
+    if (this->move_buffer[this->write_buffer].enabled == true || cmd.enabled == false) {
         return false;
     }
 
@@ -52,6 +52,19 @@ bool Robot::newCmd(RobotInstruction cmd) {
     this->increase_write_buffer();
     return true;
     
+}
+
+bool Robot::home() {
+    Serial.println("Inside home");
+    RobotInstruction cmd;
+    cmd.enabled = true;
+    cmd.servo[0].speed = SPEED_MIN;
+    cmd.synchronize = true;
+    cmd.exact = true;
+    for (int i = 0; i < this->num_servos; i++) {
+        cmd.servo[i].angle = this->init_angle[i];
+    }
+    return this->newCmd(cmd);
 }
 
 RobotInstruction Robot::getCurrentRobotInstruction() {

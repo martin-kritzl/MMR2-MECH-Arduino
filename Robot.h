@@ -52,6 +52,7 @@ class Robot{
         void increase_read_buffer();
         bool cmdAvailable();
         bool newCmd(RobotInstruction cmd);
+        bool home();
         bool checkCmd();
         bool checkServo(int id, int angle, bool exact);
         bool checkAllServo(RobotInstruction cmd);

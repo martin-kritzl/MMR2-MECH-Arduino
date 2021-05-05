@@ -36,8 +36,8 @@ Robot* robots[ROBOTS_NUM];
  *      1;moveAdv;true;true;true;142;10;-29;10
  *      1;moveAdv;true;true;true;180;10;0;10
  * 
- *      incoming: <id>;home;speed
- *      result: <id>;done;move;<exact>;<theta1>;<speed1>;<theta2>;<speed2>;<theta3>;<speed3>
+ *      incoming: <id>;home
+ *      result: <id>;move;<exact>;<speed_smooth>;<synchronize>;<theta1>;<speed1>;<theta2>;<speed2>;<theta3>;<speed3>
  * 
  *      incoming: <id>;stop
  * 
@@ -531,6 +531,9 @@ void loop() {
                 }
                 else if (!strncasecmp(token, "status", 6)) {
                     print_status(robot_index+1, robots[robot_index]->isRunning());
+                }
+                else if (!strncasecmp(token, "home", 4)) {
+                    Serial.println(robots[robot_index]->home());
                 }
             } else {
                 break;
