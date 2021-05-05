@@ -1,6 +1,15 @@
 # Overview
 This is an implementation for controlling a robot with MS-12A motors from Makeblock. 
 
+# Features
+* PTP Movement 
+* PTP Movement with synchronized servos (movement starts and ends at same time)
+* PTP Movement where the speed is slightly increased and decreased
+* Linear Movement where points in between can be buffered
+  * So the movement is smoother because of less latency
+  * The points have to be calculated separately
+* Several other helpful functions listed in chapter API
+
 # Prerequisites
 
 * Arduino: https://www.arduino.cc/en/software
@@ -23,7 +32,7 @@ This is an implementation for controlling a robot with MS-12A motors from Makebl
 # Preperation
 
 * Make sure the setup function and the defines are correct for your usage
-  * At the moment in setup is a test implementation
+  * But should work out of the box
 * At default the first robot is connected at 16 (TX)and 17 (RX), and the second robot at 14 (TX) and 15 (RX). Additionally the servos must be powered by 12V.
   * It is possible to add one more robot.
 * At default only three servos per robot are supported
