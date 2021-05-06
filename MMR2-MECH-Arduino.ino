@@ -497,6 +497,10 @@ void loop() {
         {
             if (i==0) {
                 robot_index = atoi(token)-1;
+                if (robot_index == -1 || robot_index >= ROBOTS_NUM) {
+                    Serial.println("ERROR: Robot id is not correct");
+                    break;
+                }
             } else if (i==1) {
                 if (!strncasecmp(token, "moveAdv", 7)) {
                     RobotInstruction cmd = parse_moveAdv(token); // parse the incoming command
@@ -519,10 +523,15 @@ void loop() {
                     int num_servos = parse_init(token, init_angles);
                     robots[robot_index]->setNumServos(num_servos);
                     robots[robot_index]->setInitAngles(init_angles);
+                    Serial.print(robot_index+1);Serial.println(";init");
                 }
                 else if (!strncasecmp(token, "stop", 4)) {
-                    //Todo: not finished
-                    robots[robot_index]->stopServos();
+                    robots[robot_index]->disableServos();
+                    Serial.print(robot_index+1);Serial.println(";stop");
+                }
+                else if (!strncasecmp(token, "start", 4)) {
+                    robots[robot_index]->enableServos();
+                    Serial.print(robot_index+1);Serial.println(";start");
                 }
                 else if (!strncasecmp(token, "angles", 6)) {
                     float angles[MAX_NUM_SERVOS];
@@ -533,7 +542,14 @@ void loop() {
                     print_status(robot_index+1, robots[robot_index]->isRunning());
                 }
                 else if (!strncasecmp(token, "home", 4)) {
-                    Serial.println(robots[robot_index]->home());
+                    robots[robot_index]->home();
+                }
+                else if (!strncasecmp(token, "clear", 5)) {
+                    robots[robot_index]->clearCmds();
+                    Serial.print(robot_index+1);Serial.println(";clear");
+                }
+                else {
+                    Serial.println("ERROR: Command not found");
                 }
             } else {
                 break;

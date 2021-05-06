@@ -44,6 +44,7 @@ class Robot{
         int write_buffer;
         int read_buffer;
         bool moving;
+        bool started;
         float init_angle[MAX_NUM_SERVOS];
     public:
         Robot(int id, int port);
@@ -62,6 +63,9 @@ class Robot{
         RobotInstruction cmdFinished();
         void resetSpeeds();
         void stopServos();
+        void enableServos();
+        void disableServos();
+        void clearCmds();
         void setInitAngles(float init_angles[]);
         float getAngle(int id);
         void getAngles(float angles[]);

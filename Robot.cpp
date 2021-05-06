@@ -6,6 +6,7 @@ Robot::Robot(int id, int port) {
     this->write_buffer = 0;
     this->read_buffer = 0;
     this->moving = false;
+    this->started = true;
 
     this->servos = new MeSmartServo(port);
     this->servos->begin(115200);
@@ -55,7 +56,6 @@ bool Robot::newCmd(RobotInstruction cmd) {
 }
 
 bool Robot::home() {
-    Serial.println("Inside home");
     RobotInstruction cmd;
     cmd.enabled = true;
     cmd.servo[0].speed = SPEED_MIN;
@@ -128,7 +128,7 @@ void Robot::setInitAngles(float init_angles[]) {
 }
 
 RobotInstruction Robot::cmdFinished() {
-    if (this->checkCmd() == true) {
+    if (this->checkCmd() == true && this->started == true) {
         this->driveAllServo(this->getCurrentRobotInstruction());
 
         if (this->checkAllServo(this->getCurrentRobotInstruction())) {
@@ -284,6 +284,25 @@ bool Robot::driveAllServo(RobotInstruction cmd) {
         }
     }
     return success;
+}
+
+void Robot::enableServos() {
+    this->started = true;
+}
+
+void Robot::disableServos() {
+    this->stopServos();
+    this->started = false;
+}
+
+void Robot::clearCmds() {
+    this->stopServos();
+    RobotInstruction tmp;
+    tmp.enabled = false;
+    for (int i = 0; i < BUFFER_LEN; i++) {
+        this->move_buffer[i] = tmp;
+    }
+    this->write_buffer = this->read_buffer;
 }
 
 void Robot::setNumServos(int num_servos) {

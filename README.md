@@ -33,7 +33,7 @@ This is an implementation for controlling a robot with MS-12A motors from Makebl
 
 * Make sure the setup function and the defines are correct for your usage
   * But should work out of the box
-* At default the first robot is connected at 16 (TX)and 17 (RX), and the second robot at 14 (TX) and 15 (RX). Additionally the servos must be powered by 12V.
+* At default the first robot is connected at 16 (TX) and 17 (RX), and the second robot at 14 (TX) and 15 (RX). Additionally the servos must be powered by 12V.
   * It is possible to add one more robot.
 * At default only three servos per robot are supported
   * A define must be changed an the cmd parse must be extended
@@ -43,6 +43,7 @@ This is an implementation for controlling a robot with MS-12A motors from Makebl
 ## Endpoints
 Initialize Position:
 * **Input**: \<id>;init;\<theta1>;\<theta2>;\<theta3>
+* **Return**: \<id>;init
 * **Note**: set angles to zero when tcp already in coordinate origin
 
 Simple Movement:
@@ -63,8 +64,18 @@ Get Angles of servos:
 * **Input**: \<id>;angles
 * **Return**: \<id>;\<theta1>;\<theta2>;\<theta3>
 
+Start all servos:
+* **Input**: \<id>;start
+* **Return**: \<id>;start
+* **Note**: When starting the programm this command is triggert automatically
+
 Stop all servos:
 * **Input**: \<id>;stop
+* **Return**: \<id>;stop
+
+Clear all buffered commands:
+* **Input**: \<id>;clear
+* **Return**: \<id>;clear
 
 Status of the robot:
 * **Input**: \<id>;status
@@ -74,6 +85,6 @@ Status of the robot:
 * **id**: Id of the robot starting by 1
 * **thetaX**: Absolut angle depending on the init
 * **speedX**: The speed in rpm the servo should move
-* **exact**: Defines if the point should be reached exactly
+* **exact**: Defines if the point should be reached exactly (e.g.: when using linear movement use false for points in between)
 * **speed_smooth**: Defines if the speed should be increased and decreased smoothly
 * **synchronize**: Defines if all servos should be synchronized. That means that they are starting and stopping the movement at the same time
