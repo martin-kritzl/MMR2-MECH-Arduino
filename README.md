@@ -42,44 +42,44 @@ This is an implementation for controlling a robot with MS-12A motors from Makebl
 
 ## Endpoints
 Initialize Position:
-* **Input**: \<id>;init;\<theta1>;\<theta2>;\<theta3>
-* **Return**: \<id>;init
+* **Input**: rob;\<id>;init;\<theta1>;\<theta2>;\<theta3>
+* **Return**: rob;\<id>;init
 * **Note**: set angles to zero when tcp already in coordinate origin
 
 Simple Movement:
-* **Input**: \<id>;move;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
-* **Return**: \<id>;move;true;false;false;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
+* **Input**: rob;\<id>;move;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
+* **Return**: rob;\<id>;move;true;false;false;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
 * **Note**: same as moveAdv (exact=true;speed_smooth=false;synchronize=false)
 
 Advanced Movement:
-* **Input**: \<id>;moveAdv;\<exact>;\<speed_smooth>;\<synchronize>;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
-* **Return**: \<id>;move;\<exact>;\<speed_smooth>;\<synchronize>;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
+* **Input**: rob;\<id>;moveAdv;\<exact>;\<speed_smooth>;\<synchronize>;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
+* **Return**: rob;\<id>;move;\<exact>;\<speed_smooth>;\<synchronize>;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
 * **Note**: when synchronize=true then only the \<speed1> is used for all servos
 
 Move to home position:
-* **Input**: \<id>;home
-* **Return**: \<id>;move;\<exact>;\<speed_smooth>;\<synchronize>;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
+* **Input**: rob;\<id>;home
+* **Return**: rob;\<id>;move;\<exact>;\<speed_smooth>;\<synchronize>;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
 
 Get Angles of servos:
-* **Input**: \<id>;angles
-* **Return**: \<id>;\<theta1>;\<theta2>;\<theta3>
+* **Input**: rob;\<id>;angles
+* **Return**: rob;\<id>;\<theta1>;\<theta2>;\<theta3>
 
 Start all servos:
-* **Input**: \<id>;start
-* **Return**: \<id>;start
+* **Input**: rob;\<id>;start
+* **Return**: rob;\<id>;start
 * **Note**: When starting the programm this command is triggert automatically
 
 Stop all servos:
-* **Input**: \<id>;stop
-* **Return**: \<id>;stop
+* **Input**: rob;\<id>;stop
+* **Return**: rob;\<id>;stop
 
 Clear all buffered commands:
-* **Input**: \<id>;clear
-* **Return**: \<id>;clear
+* **Input**: rob;\<id>;clear
+* **Return**: rob;\<id>;clear
 
 Status of the robot:
-* **Input**: \<id>;status
-* **Return**: \<id>;\<idle/moving>
+* **Input**: rob;\<id>;status
+* **Return**: rob;\<id>;\<idle/moving>
 
 ## Parameters
 * **id**: Id of the robot starting by 1

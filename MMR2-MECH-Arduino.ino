@@ -143,7 +143,7 @@ RobotInstruction rob_parse_moveAdv(char* token) {
 }
 
 void rob_print_move(int id, RobotInstruction cmd, int num_servos) {
-    Serial.print(id);Serial.print(";move;");
+    Serial.print("rob;");Serial.print(id);Serial.print(";move;");
     Serial.print((cmd.exact) ? "true;" : "false;");
     Serial.print((cmd.speed_smooth) ? "true;" : "false;");
     Serial.print((cmd.synchronize) ? "true;" : "false;");
@@ -154,14 +154,14 @@ void rob_print_move(int id, RobotInstruction cmd, int num_servos) {
 }
 
 void rob_print_angles(int id, float angles[], int num) {
-    Serial.print(id);Serial.print(";angles;");
+    Serial.print("rob;");Serial.print(id);Serial.print(";angles;");
     for (int i = 0; i < num; i++) {
         Serial.print(angles[i]);Serial.print(";");
     }
 }
 
 void rob_print_status(int id, bool running) {
-    Serial.print(id);Serial.print(";status;");Serial.println((running) ? "running;" : "idle;");
+    Serial.print("rob;");Serial.print(id);Serial.print(";status;");Serial.println((running) ? "running;" : "idle;");
 }
 
 void setup() {
@@ -447,77 +447,91 @@ void setup() {
     // robots[0]->newCmd(cmd19);
 }
 
+void rob_parse(char* token) {
+    int i = 0;                        // counter for number of tokens
+    int robot_index;
+    while (token != NULL)             // stop if the tokenizer returns NULL, then the string is over
+    {
+        if (i==0) {
+            robot_index = atoi(token)-1;
+            if (robot_index == -1 || robot_index >= ROBOTS_NUM) {
+                Serial.println("ERROR: Robot id is not correct");
+                break;
+            }
+        } else if (i==1) {
+            if (!strncasecmp(token, "moveAdv", 7)) {
+                RobotInstruction cmd = rob_parse_moveAdv(token); // parse the incoming command
+                if (cmd.enabled == true) {
+                    robots[robot_index]->newCmd(cmd);
+                } else {
+                    Serial.print("DEBUG: Wrong input");
+                }
+            }
+            else if (!strncasecmp(token, "move", 4)) {
+                RobotInstruction cmd = rob_parse_move(token); // parse the incoming command
+                if (cmd.enabled == true) {
+                    robots[robot_index]->newCmd(cmd);
+                } else {
+                    Serial.print("DEBUG: Wrong input");
+                }
+            }
+            else if (!strncasecmp(token, "init", 4)) {
+                float init_angles[MAX_NUM_SERVOS];
+                int num_servos = rob_parse_init(token, init_angles);
+                robots[robot_index]->setNumServos(num_servos);
+                robots[robot_index]->setInitAngles(init_angles);
+                Serial.print("rob;");Serial.print(robot_index+1);Serial.println(";init");
+            }
+            else if (!strncasecmp(token, "stop", 4)) {
+                robots[robot_index]->disableServos();
+                Serial.print("rob;");Serial.print(robot_index+1);Serial.println(";stop");
+            }
+            else if (!strncasecmp(token, "start", 4)) {
+                robots[robot_index]->enableServos();
+                Serial.print("rob;");Serial.print(robot_index+1);Serial.println(";start");
+            }
+            else if (!strncasecmp(token, "angles", 6)) {
+                float angles[MAX_NUM_SERVOS];
+                robots[robot_index]->getAngles(angles);
+                rob_print_angles(robot_index+1, angles, robots[robot_index]->getNumServos());
+            }
+            else if (!strncasecmp(token, "status", 6)) {
+                rob_print_status(robot_index+1, robots[robot_index]->isRunning());
+            }
+            else if (!strncasecmp(token, "home", 4)) {
+                robots[robot_index]->home();
+            }
+            else if (!strncasecmp(token, "clear", 5)) {
+                robots[robot_index]->clearCmds();
+                Serial.print("rob;");Serial.print(robot_index+1);Serial.println(";clear");
+            }
+            else {
+                Serial.println("ERROR: Command not found");
+            }
+        } else {
+            break;
+        }
+        ++i;
+        token = strtok(NULL, ";");
+    }
+}
+
 void loop() {
     while (Serial.available()) {
         int robot_index = -1;
         char serial_in[INPUT_SIZE];
         byte serial_size = Serial.readBytes(serial_in, INPUT_SIZE);
         serial_in[serial_size] = 0; // add 0-terminator to end of string
-        int i = 0;                        // counter for number of tokens
+        //int i = 0;                        // counter for number of tokens
         char *token = strtok(serial_in, ";");
-        while (token != NULL)
+        if (token != NULL)
         {
-            if (i==0) {
-                robot_index = atoi(token)-1;
-                if (robot_index == -1 || robot_index >= ROBOTS_NUM) {
-                    Serial.println("ERROR: Robot id is not correct");
-                    break;
-                }
-            } else if (i==1) {
-                if (!strncasecmp(token, "moveAdv", 7)) {
-                    RobotInstruction cmd = rob_parse_moveAdv(token); // parse the incoming command
-                    if (cmd.enabled == true) {
-                        robots[robot_index]->newCmd(cmd);
-                    } else {
-                        Serial.print("DEBUG: Wrong input");
-                    }
-                }
-                else if (!strncasecmp(token, "move", 4)) {
-                    RobotInstruction cmd = rob_parse_move(token); // parse the incoming command
-                    if (cmd.enabled == true) {
-                        robots[robot_index]->newCmd(cmd);
-                    } else {
-                        Serial.print("DEBUG: Wrong input");
-                    }
-                }
-                else if (!strncasecmp(token, "init", 4)) {
-                    float init_angles[MAX_NUM_SERVOS];
-                    int num_servos = rob_parse_init(token, init_angles);
-                    robots[robot_index]->setNumServos(num_servos);
-                    robots[robot_index]->setInitAngles(init_angles);
-                    Serial.print(robot_index+1);Serial.println(";init");
-                }
-                else if (!strncasecmp(token, "stop", 4)) {
-                    robots[robot_index]->disableServos();
-                    Serial.print(robot_index+1);Serial.println(";stop");
-                }
-                else if (!strncasecmp(token, "start", 4)) {
-                    robots[robot_index]->enableServos();
-                    Serial.print(robot_index+1);Serial.println(";start");
-                }
-                else if (!strncasecmp(token, "angles", 6)) {
-                    float angles[MAX_NUM_SERVOS];
-                    robots[robot_index]->getAngles(angles);
-                    rob_print_angles(robot_index+1, angles, robots[robot_index]->getNumServos());
-                }
-                else if (!strncasecmp(token, "status", 6)) {
-                    rob_print_status(robot_index+1, robots[robot_index]->isRunning());
-                }
-                else if (!strncasecmp(token, "home", 4)) {
-                    robots[robot_index]->home();
-                }
-                else if (!strncasecmp(token, "clear", 5)) {
-                    robots[robot_index]->clearCmds();
-                    Serial.print(robot_index+1);Serial.println(";clear");
-                }
-                else {
-                    Serial.println("ERROR: Command not found");
-                }
+            if (!strncasecmp(token, "rob", 3)) {
+                token = strtok(NULL, ";");
+                rob_parse(token);
             } else {
-                break;
+                Serial.println("ERROR: Type not found");
             }
-            ++i;
-            token = strtok(NULL, ";");
         }
     }
 
