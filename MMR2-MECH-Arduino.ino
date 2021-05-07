@@ -158,6 +158,7 @@ void rob_print_angles(int id, float angles[], int num) {
     for (int i = 0; i < num; i++) {
         Serial.print(angles[i]);Serial.print(";");
     }
+    Serial.println("");
 }
 
 void rob_print_status(int id, bool running) {
@@ -173,6 +174,8 @@ void setup() {
     
     // Ansonsten stoppen die Servos zu beginn und fahren dann erst an
     delay(1000);
+
+    Serial.print("INFO: ");Serial.print(ROBOTS_NUM);Serial.println(" robots are ready. Make sure to init first.");
 
 
     /**
@@ -539,6 +542,10 @@ void loop() {
         RobotInstruction actCmd = robots[i]->cmdFinished();
         if (actCmd.enabled == true) {
             rob_print_move(i+1, actCmd, robots[i]->getNumServos());
+        }
+        if (robots[i]->checkCollision()) {
+            robots[i]->disableServos();
+            Serial.println("ERROR: Collision detected");
         }
     }
 }

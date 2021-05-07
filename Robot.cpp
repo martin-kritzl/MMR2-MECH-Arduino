@@ -5,8 +5,8 @@ Robot::Robot(int id, int port) {
     this->num_servos = 0;
     this->write_buffer = 0;
     this->read_buffer = 0;
-    this->moving = false;
     this->started = true;
+    this->count_same_angles = 0;
 
     this->servos = new MeSmartServo(port);
     this->servos->begin(115200);
@@ -18,6 +18,7 @@ Robot::Robot(int id, int port) {
     for (int i = 0; i < this->num_servos;i++) {
         this->last_speed[i] = 0.0;
         this->servos->setZero(i+1);
+        this->moving_servos[i] = false;
     }
 }
 
@@ -77,6 +78,12 @@ void Robot::resetSpeeds() {
     }
 }
 
+void Robot::setAllServosMoving() {
+    for (int i = 0; i < this->num_servos; i++) {
+        this->moving_servos[i] = true;
+    }
+}
+
 RobotInstruction Robot::finishCurrentRobotInstruction() {
     RobotInstruction finished;
     if (this->getCurrentRobotInstruction().exact == true) {
@@ -114,7 +121,12 @@ DriveInstruction Robot::getCurrentDriveInstruction(int id) {
 
 bool Robot::checkCmd() {
     if (this->cmdAvailable() == false) {
-        this->moving = false;
+        //Wenn kein Befehl mehr vorhanden und der State noch immer auf running ist
+        //Alle Motoren stoppen und running auf false setzen
+        if (this->isRunning()) {
+            this->stopServos();
+        }
+        
         return false;
     }
     return true;
@@ -123,6 +135,7 @@ bool Robot::checkCmd() {
 void Robot::setInitAngles(float init_angles[]) {
     for (int i = 0; i < this->num_servos;i++) {
         this->init_angle[i] = init_angles[i];
+        this->last_angles[i] = init_angles[i];
         this->servos->setZero(i+1);
     }
 }
@@ -150,9 +163,14 @@ bool Robot::checkAllServo(RobotInstruction cmd) {
     if (this->cmdAvailable() == false) return false;
     for (int i = 1; i <= this->num_servos; i++) {
         DriveInstruction drive = this->getCurrentDriveInstruction(i);
-        if (this->checkServo(i, drive.angle - this->init_angle[i-1], cmd.exact) == false) {
-            return false;
+        if (this->checkServo(i, drive.angle - this->init_angle[i-1], cmd.exact) == true) {
+            this->moving_servos[i-1] = false;
+        } else {
+            this->moving_servos[i-1] = true;
         }
+    }
+    if (this->isRunning()) {
+        return false;
     }
     if (cmd.exact) {
         this->stopServos();
@@ -161,8 +179,9 @@ bool Robot::checkAllServo(RobotInstruction cmd) {
 }
 
 void Robot::stopServos() {
-    for (int i = 1; i<= this->num_servos;i++) {
-        this->servos->setPwmMove(i,0);
+    for (int i = 0; i < this->num_servos;i++) {
+        this->servos->setPwmMove(i+1,0);
+        this->moving_servos[i] = false;
         // this->servos->setBreak(i, true);
     }
 }
@@ -174,7 +193,7 @@ float Robot::getAngle(int id) {
 
 void Robot::getAngles(float angles[]) {
     for (int i = 0; i < this->num_servos; i++) {
-        angles[i] = this->servos->getAngleRequest(i+1) + this->init_angle[i];
+        angles[i] = this->getAngle(i+1);
     }
 }
 
@@ -210,7 +229,12 @@ RobotInstruction Robot::synchronizeServos(RobotInstruction cmd) {
 }
 
 bool Robot::isRunning() {
-    return this->moving;
+    bool moving = false;
+    for (int i = 0; i < this->num_servos; i++) {
+        if (this->moving_servos[i] == true)
+            moving = true;
+    }
+    return moving;
 }
 
 bool Robot::checkServo(int id, int angle, bool exact) {
@@ -221,8 +245,33 @@ bool Robot::checkServo(int id, int angle, bool exact) {
     return ((cur_angle <= angle + ANGLE_TOLERANCE) && (cur_angle >= angle - ANGLE_TOLERANCE));
 }
 
+bool Robot::checkCollision() {
+    if (this->cmdAvailable() == false || this->started == false) {
+        return false;
+    }
+    bool same = false;
+    float current_angle;
+    for (int i = 0; i < this->num_servos; i++) {
+        current_angle = this->getAngle(i+1);
+
+        if (this->last_angles[i] == current_angle && this->moving_servos[i] == true) {
+            same = true;
+        }
+        last_angles[i] = current_angle;
+    }
+    if (same == true) {
+        this->count_same_angles++;
+    } else {
+        this->count_same_angles = 0;
+    }
+
+    if (this->count_same_angles > COLLISION_MAX_COUNT) {
+        return true;
+    }
+    return false;
+}
+
 bool Robot::driveServo(int id, DriveInstruction cmd) {
-    this->moving = true;
     // if (id == 1 && this->id == 1) {
     //     Serial.print("Angle: ");Serial.print(cmd.angle - this->init_angle[id-1]);
     //     Serial.print("; Speed: ");Serial.println(cmd.speed);

@@ -5,6 +5,7 @@
 
 #define MAX_NUM_SERVOS 3
 #define BUFFER_LEN 20
+#define COLLISION_MAX_COUNT 10
 
 #define ANGLE_TOLERANCE 7
 #define ANGLE_TOLERANCE_EXACT 2
@@ -43,9 +44,11 @@ class Robot{
         float last_speed[MAX_NUM_SERVOS];
         int write_buffer;
         int read_buffer;
-        bool moving;
         bool started;
+        bool moving_servos[MAX_NUM_SERVOS];
         float init_angle[MAX_NUM_SERVOS];
+        float last_angles[MAX_NUM_SERVOS];
+        int count_same_angles;
     public:
         Robot(int id, int port);
         ~Robot();
@@ -70,6 +73,8 @@ class Robot{
         float getAngle(int id);
         void getAngles(float angles[]);
         bool isRunning();
+        bool checkCollision();
+        void setAllServosMoving();
         DriveInstruction smoothCmd(DriveInstruction cmd, float cur_speed);
         RobotInstruction synchronizeServos(RobotInstruction cmd);
         // bool start();
