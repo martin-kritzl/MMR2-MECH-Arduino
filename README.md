@@ -9,10 +9,12 @@ This is an implementation for controlling a robot with MS-12A motors from Makebl
   * So the movement is smoother because of less latency
   * The points have to be calculated separately
 * Several other helpful functions listed in chapter API
+* There is always a collision detection enabled
 
 # Prerequisites
 
 * Arduino: https://www.arduino.cc/en/software
+  * Arduino Library Manager: Rosserial Arduino Library (Version 0.7.9)
 * Makeblock-Libraries: https://github.com/Makeblock-official/Makeblock-Libraries
 * (optional) vscode: https://code.visualstudio.com/
   * with extension: vsciot-vscode.vscode-arduino
