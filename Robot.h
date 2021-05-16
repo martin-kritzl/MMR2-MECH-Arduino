@@ -33,6 +33,7 @@ struct RobotInstruction
     bool speed_smooth = false;
     bool synchronize = false;
     bool enabled = false;
+    unsigned int delay = 0;
 };
 
 class Robot{

@@ -111,21 +111,24 @@ RobotInstruction rob_parse_moveAdv(const char* token) {
                 result.synchronize = (!strncasecmp(token, "true", 4) ? true : false);
                 break;
             case 4:
-                result.servo[0].angle = atoi(token);
+                result.delay = atoi(token);
                 break;
             case 5:
-                result.servo[0].speed = atoi(token);
+                result.servo[0].angle = atoi(token);
                 break;
             case 6:
-                result.servo[1].angle = atoi(token);
+                result.servo[0].speed = atoi(token);
                 break;
             case 7:
-                result.servo[1].speed = atoi(token);
+                result.servo[1].angle = atoi(token);
                 break;
             case 8:
-                result.servo[2].angle = atoi(token);
+                result.servo[1].speed = atoi(token);
                 break;
             case 9:
+                result.servo[2].angle = atoi(token);
+                break;
+            case 10:
                 result.servo[2].speed = atoi(token);
                 break;
             default:
@@ -145,10 +148,11 @@ RobotInstruction rob_parse_moveAdv(const char* token) {
 }
 
 void rob_print_move(int id, RobotInstruction cmd, int num_servos) {
-    Serial.print("rob;");Serial.print(id);Serial.print(";move;");
+    Serial.print("rob;");Serial.print(id);Serial.print(";finished;");
     Serial.print((cmd.exact) ? "true;" : "false;");
     Serial.print((cmd.speed_smooth) ? "true;" : "false;");
     Serial.print((cmd.synchronize) ? "true;" : "false;");
+    Serial.print(cmd.delay);Serial.print(";");
     for (int i = 0; i < num_servos;i++) {
         Serial.print(cmd.servo[i].angle);Serial.print(";");Serial.print(cmd.servo[i].speed);Serial.print(";");
     }
@@ -183,6 +187,7 @@ void rob_parse(const char* token) {
                 RobotInstruction cmd = rob_parse_moveAdv(token); // parse the incoming command
                 if (cmd.enabled == true) {
                     robots[robot_index]->newCmd(cmd);
+                    Serial.print("rob;");Serial.print(robot_index+1);Serial.println(";moveAdv");
                 } else {
                     Serial.print("DEBUG: Wrong input");
                 }
@@ -191,6 +196,7 @@ void rob_parse(const char* token) {
                 RobotInstruction cmd = rob_parse_move(token); // parse the incoming command
                 if (cmd.enabled == true) {
                     robots[robot_index]->newCmd(cmd);
+                    Serial.print("rob;");Serial.print(robot_index+1);Serial.println(";move");
                 } else {
                     Serial.print("DEBUG: Wrong input");
                 }

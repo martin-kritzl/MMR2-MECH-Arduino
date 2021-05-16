@@ -51,11 +51,11 @@ Initialize Position:
 Simple Movement:
 * **Input**: rob;\<id>;move;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
 * **Return**: rob;\<id>;move;true;false;false;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
-* **Note**: same as moveAdv (exact=true;speed_smooth=false;synchronize=false)
+* **Note**: same as moveAdv (exact=true;speed_smooth=false;synchronize=false;delay=0)
 
 Advanced Movement:
-* **Input**: rob;\<id>;moveAdv;\<exact>;\<speed_smooth>;\<synchronize>;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
-* **Return**: rob;\<id>;move;\<exact>;\<speed_smooth>;\<synchronize>;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
+* **Input**: rob;\<id>;moveAdv;\<exact>;\<speed_smooth>;\<synchronize>;\<delay_ms>;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
+* **Return**: rob;\<id>;move;\<exact>;\<speed_smooth>;\<synchronize>;\<delay_ms>;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
 * **Note**: when synchronize=true then only the \<speed1> is used for all servos
 
 Move to home position:
@@ -90,3 +90,4 @@ Status of the robot:
 * **exact**: Defines if the point should be reached exactly (e.g.: when using linear movement use false for points in between)
 * **speed_smooth**: Defines if the speed should be increased and decreased smoothly
 * **synchronize**: Defines if all servos should be synchronized. That means that they are starting and stopping the movement at the same time
+* **delay**: Defines how many milliseconds the robot should wait after the movement

@@ -92,6 +92,9 @@ RobotInstruction Robot::finishCurrentRobotInstruction() {
     finished = this->getCurrentRobotInstruction();
     this->move_buffer[this->read_buffer].enabled = false;
     this->increase_read_buffer();
+
+    delay(finished.delay);
+
     return finished;
 }
 
