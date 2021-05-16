@@ -10,6 +10,8 @@
  *  //mysmartservo.getAngleRequest(<id>); //This function used to get the smart servo's angle.
  */
 
+unsigned long cur_time;
+
 MePort_Sig mePort[17] =
 {
     { NC, NC }, {   5,   4 }, {   3,   2 }, {   7,   6 }, {   9,   8 }, 
@@ -519,13 +521,21 @@ void setup() {
     // robots[0]->newCmd(cmd19);
 }
 
+void print_time() {
+    unsigned long time = millis();
+    Serial.println(time-cur_time);
+    if (time-cur_time > 10) {
+        Serial.println("TIME: long");
+    }
+    cur_time = time;
+}
+
 void loop() {
     while (Serial.available()) {
         int robot_index = -1;
         char serial_in[INPUT_SIZE];
-        byte serial_size = Serial.readBytes(serial_in, INPUT_SIZE);
-        serial_in[serial_size] = 0; // add 0-terminator to end of string
-        //int i = 0;                        // counter for number of tokens
+        byte serial_size = Serial.readBytesUntil('\n',serial_in, INPUT_SIZE);
+        serial_in[serial_size-1] = 0; // add 0-terminator to end of string
         char *token = strtok(serial_in, ";");
         if (token != NULL)
         {
