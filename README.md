@@ -50,13 +50,15 @@ Initialize Position:
 
 Simple Movement:
 * **Input**: rob;\<id>;move;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
-* **Return**: rob;\<id>;move;true;false;false;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
-* **Note**: same as moveAdv (exact=true;speed_smooth=false;synchronize=false;delay=0)
+* **Return**: rob;\<id>;move
+* **Asynchron Return**: rob;\<id>;async;true;false;false;0;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
+* **Note**: same as moveAdv (exact=true;speed_smooth=false;synchronize=false;delay=0). Asychron return when move is finished
 
 Advanced Movement:
 * **Input**: rob;\<id>;moveAdv;\<exact>;\<speed_smooth>;\<synchronize>;\<delay_ms>;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
-* **Return**: rob;\<id>;move;\<exact>;\<speed_smooth>;\<synchronize>;\<delay_ms>;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
-* **Note**: when synchronize=true then only the \<speed1> is used for all servos
+* **Return**: rob;\<id>;moveAdv
+* **Asynchron Return**: rob;\<id>;async;\<exact>;\<speed_smooth>;\<synchronize>;\<delay_ms>;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
+* **Note**: when synchronize=true then only the \<speed1> is used for all servos. Asychron return when move is finished
 
 Move to home position:
 * **Input**: rob;\<id>;home

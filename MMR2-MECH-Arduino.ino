@@ -102,13 +102,13 @@ RobotInstruction rob_parse_moveAdv(const char* token) {
         switch (i) {
             case 0: break;
             case 1:
-                result.exact = (!strncasecmp(token, "true", 4) ? true : false);
+                result.exact = (!strncmp(token, "true", 4) ? true : false);
                 break;
             case 2:
-                result.speed_smooth = (!strncasecmp(token, "true", 4) ? true : false);
+                result.speed_smooth = (!strncmp(token, "true", 4) ? true : false);
                 break;
             case 3:
-                result.synchronize = (!strncasecmp(token, "true", 4) ? true : false);
+                result.synchronize = (!strncmp(token, "true", 4) ? true : false);
                 break;
             case 4:
                 result.delay = atoi(token);
@@ -148,7 +148,7 @@ RobotInstruction rob_parse_moveAdv(const char* token) {
 }
 
 void rob_print_move(int id, RobotInstruction cmd, int num_servos) {
-    Serial.print("rob;");Serial.print(id);Serial.print(";finished;");
+    Serial.print("rob;");Serial.print(id);Serial.print(";async;");
     Serial.print((cmd.exact) ? "true;" : "false;");
     Serial.print((cmd.speed_smooth) ? "true;" : "false;");
     Serial.print((cmd.synchronize) ? "true;" : "false;");
@@ -183,7 +183,7 @@ void rob_parse(const char* token) {
                 break;
             }
         } else if (i==1) {
-            if (!strncasecmp(token, "moveAdv", 7)) {
+            if (!strncmp(token, "moveAdv", 7)) {
                 RobotInstruction cmd = rob_parse_moveAdv(token); // parse the incoming command
                 if (cmd.enabled == true) {
                     robots[robot_index]->newCmd(cmd);
@@ -192,7 +192,7 @@ void rob_parse(const char* token) {
                     Serial.print("DEBUG: Wrong input");
                 }
             }
-            else if (!strncasecmp(token, "move", 4)) {
+            else if (!strncmp(token, "move", 4)) {
                 RobotInstruction cmd = rob_parse_move(token); // parse the incoming command
                 if (cmd.enabled == true) {
                     robots[robot_index]->newCmd(cmd);
@@ -201,33 +201,33 @@ void rob_parse(const char* token) {
                     Serial.print("DEBUG: Wrong input");
                 }
             }
-            else if (!strncasecmp(token, "init", 4)) {
+            else if (!strncmp(token, "init", 4)) {
                 float init_angles[MAX_NUM_SERVOS];
                 int num_servos = rob_parse_init(token, init_angles);
                 robots[robot_index]->setNumServos(num_servos);
                 robots[robot_index]->setInitAngles(init_angles);
                 Serial.print("rob;");Serial.print(robot_index+1);Serial.println(";init");
             }
-            else if (!strncasecmp(token, "stop", 4)) {
+            else if (!strncmp(token, "stop", 4)) {
                 robots[robot_index]->disableServos();
                 Serial.print("rob;");Serial.print(robot_index+1);Serial.println(";stop");
             }
-            else if (!strncasecmp(token, "start", 4)) {
+            else if (!strncmp(token, "start", 4)) {
                 robots[robot_index]->enableServos();
                 Serial.print("rob;");Serial.print(robot_index+1);Serial.println(";start");
             }
-            else if (!strncasecmp(token, "angles", 6)) {
+            else if (!strncmp(token, "angles", 6)) {
                 float angles[MAX_NUM_SERVOS];
                 robots[robot_index]->getAngles(angles);
                 rob_print_angles(robot_index+1, angles, robots[robot_index]->getNumServos());
             }
-            else if (!strncasecmp(token, "status", 6)) {
+            else if (!strncmp(token, "status", 6)) {
                 rob_print_status(robot_index+1, robots[robot_index]->isRunning());
             }
-            else if (!strncasecmp(token, "home", 4)) {
+            else if (!strncmp(token, "home", 4)) {
                 robots[robot_index]->home();
             }
-            else if (!strncasecmp(token, "clear", 5)) {
+            else if (!strncmp(token, "clear", 5)) {
                 robots[robot_index]->clearCmds();
                 Serial.print("rob;");Serial.print(robot_index+1);Serial.println(";clear");
             }
@@ -545,7 +545,7 @@ void loop() {
         char *token = strtok(serial_in, ";");
         if (token != NULL)
         {
-            if (!strncasecmp(token, "rob", 3)) {
+            if (!strncmp(token, "rob", 3)) {
                 token = strtok(NULL, ";");
                 rob_parse(token);
             } else {
