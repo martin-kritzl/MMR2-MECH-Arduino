@@ -83,7 +83,8 @@ Clear all buffered commands:
 
 Status of the robot:
 * **Input**: rob;\<id>;status
-* **Return**: rob;\<id>;\<idle/moving>
+* **Return**: rob;\<id>;\<disabled/uninitialized/idle/moving>
+* **Note**: disabled (Collision was detected, start robot with start command and maybe clear before); uninitialized (the init command has to be send before); idle (there is nothing in the buffer and robot is not moving); moving (robot moves at the moment)
 
 ## Parameters
 * **id**: Id of the robot starting by 1

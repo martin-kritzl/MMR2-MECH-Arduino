@@ -73,7 +73,8 @@ class Robot{
         void setInitAngles(float init_angles[]);
         float getAngle(int id);
         void getAngles(float angles[]);
-        bool isRunning();
+        bool isMoving();
+        bool isDisabled();
         bool checkCollision();
         void setAllServosMoving();
         DriveInstruction smoothCmd(DriveInstruction cmd, float cur_speed);

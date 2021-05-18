@@ -14,12 +14,6 @@ Robot::Robot(int id, int port) {
     this->servos->assignDevIdRequest();
 
     this->stopServos();
-
-    for (int i = 0; i < this->num_servos;i++) {
-        this->last_speed[i] = 0.0;
-        this->servos->setZero(i+1);
-        this->moving_servos[i] = false;
-    }
 }
 
 Robot::~Robot() {
@@ -126,7 +120,7 @@ bool Robot::checkCmd() {
     if (this->cmdAvailable() == false) {
         //Wenn kein Befehl mehr vorhanden und der State noch immer auf running ist
         //Alle Motoren stoppen und running auf false setzen
-        if (this->isRunning()) {
+        if (this->isMoving()) {
             this->stopServos();
         }
         
@@ -136,9 +130,12 @@ bool Robot::checkCmd() {
 }
 
 void Robot::setInitAngles(float init_angles[]) {
+    this->stopServos();
+    this->clearCmds();
     for (int i = 0; i < this->num_servos;i++) {
         this->init_angle[i] = init_angles[i];
         this->last_angles[i] = init_angles[i];
+        this->moving_servos[i] = false;
         this->servos->setZero(i+1);
     }
 }
@@ -172,7 +169,7 @@ bool Robot::checkAllServo(RobotInstruction cmd) {
             this->moving_servos[i-1] = true;
         }
     }
-    if (this->isRunning()) {
+    if (this->isMoving()) {
         return false;
     }
     if (cmd.exact) {
@@ -231,13 +228,17 @@ RobotInstruction Robot::synchronizeServos(RobotInstruction cmd) {
     return cmd;
 }
 
-bool Robot::isRunning() {
+bool Robot::isMoving() {
     bool moving = false;
     for (int i = 0; i < this->num_servos; i++) {
         if (this->moving_servos[i] == true)
             moving = true;
     }
     return moving;
+}
+
+bool Robot::isDisabled() {
+    return !this->started;
 }
 
 bool Robot::checkServo(int id, int angle, bool exact) {
