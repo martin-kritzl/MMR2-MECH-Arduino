@@ -14,7 +14,6 @@ This is an implementation for controlling a robot with MS-12A motors from Makebl
 # Prerequisites
 
 * Arduino: https://www.arduino.cc/en/software
-  * Arduino Library Manager: Rosserial Arduino Library (Version 0.7.9)
 * Makeblock-Libraries: https://github.com/Makeblock-official/Makeblock-Libraries
 * (optional) vscode: https://code.visualstudio.com/
   * with extension: vsciot-vscode.vscode-arduino
@@ -43,6 +42,8 @@ This is an implementation for controlling a robot with MS-12A motors from Makebl
 # API
 
 ## Endpoints
+All the following endpoints can be reached with a serial connection. For example when developing python use the "pyserial" package.
+
 Initialize Position:
 * **Input**: rob;\<id>;init;\<theta1>;\<theta2>;\<theta3>
 * **Return**: rob;\<id>;init
@@ -62,7 +63,8 @@ Advanced Movement:
 
 Move to home position:
 * **Input**: rob;\<id>;home
-* **Return**: rob;\<id>;move;\<exact>;\<speed_smooth>;\<synchronize>;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
+* **Return**: rob;\<id>;home
+* **Asynchron Return**: rob;\<id>;async;true;false;false;0;\<theta1>;5;\<theta2>;5;\<theta3>;5
 
 Get Angles of servos:
 * **Input**: rob;\<id>;angles

@@ -1,3 +1,29 @@
+/*
+Copyright (C) 2021 Martin Kritzl
+
+This file is part of MMR2-MECH-Arduino
+(https://github.com/martin-kritzl/MMR2-MECH-Arduino)
+
+
+MMR2-MECH-Arduino is free software: you can redistribute it and/or modify 
+it under the terms of the GNU General Public License as published by 
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful, 
+but WITHOUT ANY WARRANTY; without even the implied warranty of 
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the 
+GNU General Public License for more details.
+
+
+You should have received a copy of the GNU General Public License 
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#ifndef MMR2-MECH-MMR2_MECH_ARDUINO_H
+#define MMR2_MECH_ARDUINO_H
+
+
 #include <MeSmartServo.h>
 #include <SoftwareSerial.h>
 #include "Robot.h"
@@ -23,3 +49,5 @@ void rob_print_status(int id, bool running);
 void rob_parse(const char* token);
 void setup();
 void loop();
+
+#endif //MMR2_MECH_ARDUINO_H
