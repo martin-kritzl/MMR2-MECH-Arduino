@@ -89,6 +89,12 @@ RobotInstruction Robot::finishCurrentRobotInstruction() {
 
     delay(finished.delay);
 
+    // Es muss zumindest ein Motor wieder auf moving gesetzt werden, wenn noch ein
+    // Befehl im Buffer ist, weil ansonst der Status idle zwischendurch angezeigt wird.
+    if (this->cmdAvailable()) {
+        this->moving_servos[0] = true;
+    }
+
     return finished;
 }
 
@@ -135,7 +141,6 @@ void Robot::setInitAngles(float init_angles[]) {
     for (int i = 0; i < this->num_servos;i++) {
         this->init_angle[i] = init_angles[i];
         this->last_angles[i] = init_angles[i];
-        this->moving_servos[i] = false;
         this->servos->setZero(i+1);
     }
 }
