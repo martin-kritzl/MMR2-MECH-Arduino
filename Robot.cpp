@@ -221,6 +221,8 @@ RobotInstruction Robot::synchronizeServos(RobotInstruction cmd) {
 
         for (int i = 0; i < this->num_servos; i++) {
             cmd.servo[i].speed = diff_angles[i]/time;
+            if (cmd.servo[i].speed < SPEED_MIN)
+                cmd.servo[i].speed = SPEED_MIN;
             // Serial.print(i);Serial.print(" Speed: ");Serial.println(cmd.servo[i].speed);
         }
     }
