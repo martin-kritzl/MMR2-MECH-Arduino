@@ -20,7 +20,7 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef MMR2-MECH-MMR2_MECH_ARDUINO_H
+#ifndef MMR2_MECH_ARDUINO_H
 #define MMR2_MECH_ARDUINO_H
 
 
