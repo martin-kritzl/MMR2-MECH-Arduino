@@ -94,6 +94,12 @@ void Robot::resetSpeeds() {
     }
 }
 
+void Robot::setBreaks(bool break_status) {
+    for (int i = 0; i < this->num_servos;i++) {
+        this->servos->setBreak(i+1, !break_status);
+    }
+}
+
 void Robot::setAllServosMoving() {
     for (int i = 0; i < this->num_servos; i++) {
         this->moving_servos[i] = true;
@@ -209,7 +215,6 @@ void Robot::stopServos() {
     for (int i = 0; i < this->num_servos;i++) {
         this->servos->setPwmMove(i+1,0);
         this->moving_servos[i] = false;
-        this->servos->setBreak(i+1, true);
     }
 }
 

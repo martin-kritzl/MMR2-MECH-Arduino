@@ -41,6 +41,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define UART3_RX 15
 
 int rob_parse_init(const char* token, float output[]);
+bool rob_parse_break(const char* token);
 RobotInstruction rob_parse_move(const char* token);
 RobotInstruction rob_parse_moveAdv(const char* token);
 void rob_print_move(int id, RobotInstruction cmd, int num_servos);

@@ -67,6 +67,23 @@ int rob_parse_init(const char* token, float output[]) {
     return i-1;
 }
 
+bool rob_parse_break(const char* token) {
+    int i = 0;
+    bool status;
+    while (token != NULL)
+    {
+        switch (i) {
+            case 0: break;
+            case 1:
+                status = (!strncasecmp(token, "true", 4) ? true : false);
+                break;
+        }
+        ++i;
+        token = strtok(NULL, ";");
+    }
+    return status;
+}
+
 RobotInstruction rob_parse_move(const char* token) {
     RobotInstruction result;
     result.enabled = true;
@@ -263,7 +280,11 @@ void rob_parse(const char* token) {
                 robots[robot_index]->clearCmds();
                 Serial.print("rob;");Serial.print(robot_index+1);Serial.println(";clear");
             }
-            else {
+            else if (!strncasecmp(token, "break", 5)) {
+                bool break_status = rob_parse_break(token);
+                robots[robot_index]->setBreaks(break_status);
+                Serial.print("rob;");Serial.print(robot_index+1);Serial.println(";break");
+            } else {
                 Serial.println("ERROR: Command not found");
             }
         } else {

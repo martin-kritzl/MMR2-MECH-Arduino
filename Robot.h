@@ -88,6 +88,7 @@ class Robot{
         RobotInstruction finishCurrentRobotInstruction();
         RobotInstruction cmdFinished();
         void resetSpeeds();
+        void setBreaks(bool break_status);
         void stopServos();
         void enableServos();
         void disableServos();

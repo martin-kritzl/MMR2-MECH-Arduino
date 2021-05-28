@@ -34,7 +34,7 @@ This is an implementation for controlling a robot with MS-12A motors from Makebl
 
 * Make sure the setup function and the defines are correct for your usage
   * But should work out of the box
-* At default the first robot is connected at 16 (TX) and 17 (RX), and the second robot at 14 (TX) and 15 (RX). Additionally the servos must be powered by 12V.
+* At default the first robot is connected at 16 (TX, yellow) and 17 (RX, white), and the second robot at 14 (TX, yellow) and 15 (RX, white). Additionally the servos must be powered by 12V.
   * It is possible to add one more robot.
 * At default only three servos per robot are supported
   * A define must be changed an the cmd parse must be extended
@@ -82,6 +82,11 @@ Stop all servos:
 Clear all buffered commands:
 * **Input**: rob;\<id>;clear
 * **Return**: rob;\<id>;clear
+
+Set breaks:
+* **Input**: rob;\<id>;break;\<break_status>
+* **Return**: rob;\<id>;break;
+* **Note**: Enable or disable breaks (disable for teaching; enable for movement)
 
 Status of the robot:
 * **Input**: rob;\<id>;status
