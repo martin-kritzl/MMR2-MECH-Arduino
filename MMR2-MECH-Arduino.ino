@@ -69,7 +69,7 @@ int rob_parse_init(const char* token, float output[]) {
 
 bool rob_parse_break(const char* token) {
     int i = 0;
-    bool status;
+    bool status = true;
     while (token != NULL)
     {
         switch (i) {
