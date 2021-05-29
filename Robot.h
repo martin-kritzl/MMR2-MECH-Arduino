@@ -34,6 +34,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define SPEED_MIN 5
 #define SPEED_INCREMENT 0.8
 
+#define MIN_VOLTAGE 6.0
+#define MAX_VOLTAGE 12.6
+
 /** 
  * @struct DriveInstruction
  * @brief Struct which contains the drive instruction (absolute angle and speed) of a motor.
@@ -89,6 +92,7 @@ class Robot{
         RobotInstruction cmdFinished();
         void resetSpeeds();
         void setBreaks(bool break_status);
+        bool isConnected();
         void stopServos();
         void enableServos();
         void disableServos();

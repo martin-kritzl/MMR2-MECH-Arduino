@@ -46,7 +46,7 @@ RobotInstruction rob_parse_move(const char* token);
 RobotInstruction rob_parse_moveAdv(const char* token);
 void rob_print_move(int id, RobotInstruction cmd, int num_servos);
 void rob_print_angles(int id, float angles[], int num);
-void rob_print_status(int id, bool running);
+void rob_print_status(int id, bool running, bool disabled, bool connected, int num_servos);
 void rob_parse(const char* token);
 void setup();
 void loop();

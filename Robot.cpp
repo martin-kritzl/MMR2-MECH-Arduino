@@ -100,6 +100,17 @@ void Robot::setBreaks(bool break_status) {
     }
 }
 
+bool Robot::isConnected() {
+    if (this->num_servos == 0) return false;
+    for (int i = 1; i <= this->num_servos;i++) {
+        float voltage = this->servos->getVoltageRequest(i);
+        Serial.print(i);Serial.print(": ");Serial.println(voltage);
+        if (voltage < MIN_VOLTAGE || voltage > MAX_VOLTAGE)
+            return false;
+    }
+    return true;
+}
+
 void Robot::setAllServosMoving() {
     for (int i = 0; i < this->num_servos; i++) {
         this->moving_servos[i] = true;

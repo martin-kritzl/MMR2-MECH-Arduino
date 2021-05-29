@@ -206,12 +206,14 @@ void rob_print_angles(int id, float angles[], int num) {
     Serial.println("");
 }
 
-void rob_print_status(int id, bool running, bool disabled, int num_servos) {
+void rob_print_status(int id, bool running, bool disabled, bool connected, int num_servos) {
     Serial.print("rob;");Serial.print(id);Serial.print(";status;");
-    if (disabled) {
-        Serial.println("disabled;");
-    } else if (num_servos == 0) {
+    if (num_servos == 0) {
         Serial.println("uninitialized;");
+    } else if (!connected) {
+        Serial.println("disconnected;");
+    } else if (disabled) {
+        Serial.println("disabled;");
     } else if (running) {
         Serial.println("moving;");
     } else {
@@ -270,7 +272,8 @@ void rob_parse(const char* token) {
                 rob_print_angles(robot_index+1, angles, robots[robot_index]->getNumServos());
             }
             else if (!strncasecmp(token, "status", 6)) {
-                rob_print_status(robot_index+1, robots[robot_index]->isMoving(), robots[robot_index]->isDisabled(), robots[robot_index]->getNumServos());
+                rob_print_status(robot_index+1, robots[robot_index]->isMoving(), robots[robot_index]->isDisabled(), 
+                robots[robot_index]->isConnected(), robots[robot_index]->getNumServos());
             }
             else if (!strncasecmp(token, "home", 4)) {
                 robots[robot_index]->home();
