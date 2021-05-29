@@ -29,6 +29,7 @@ Robot::Robot(int id, int port) {
     this->read_buffer = 0;
     this->started = true;
     this->count_same_angles = 0;
+    this->sleep_until = 0;
 
     this->servos = new MeSmartServo(port);
     this->servos->begin(115200);
@@ -126,7 +127,7 @@ RobotInstruction Robot::finishCurrentRobotInstruction() {
     this->move_buffer[this->read_buffer].enabled = false;
     this->increase_read_buffer();
 
-    delay(finished.delay);
+    this->sleep_until = millis() + finished.delay;
 
     // Es muss zumindest ein Motor wieder auf moving gesetzt werden, wenn noch ein
     // Befehl im Buffer ist, weil ansonst der Status idle zwischendurch angezeigt wird.
@@ -185,17 +186,22 @@ void Robot::setInitAngles(float init_angles[]) {
 }
 
 RobotInstruction Robot::cmdFinished() {
-    if (this->checkCmd() == true && this->started == true) {
-        this->driveAllServo(this->getCurrentRobotInstruction());
+    if (millis() > this->sleep_until) {
+        // Reset der Zeit, sonst kommt es beim overflow von millis() zu einer
+        // falschen Wartezeit
+        this->sleep_until = 0;
+        if (this->checkCmd() == true && this->started == true) {
+            this->driveAllServo(this->getCurrentRobotInstruction());
 
-        if (this->checkAllServo(this->getCurrentRobotInstruction())) {
-            RobotInstruction last = this->finishCurrentRobotInstruction();
-            if (this->getCurrentRobotInstruction().synchronize) {
-                RobotInstruction tmp = this->synchronizeServos(this->getCurrentRobotInstruction());
-                this->move_buffer[read_buffer] = tmp;
+            if (this->checkAllServo(this->getCurrentRobotInstruction())) {
+                RobotInstruction last = this->finishCurrentRobotInstruction();
+                if (this->getCurrentRobotInstruction().synchronize) {
+                    RobotInstruction tmp = this->synchronizeServos(this->getCurrentRobotInstruction());
+                    this->move_buffer[read_buffer] = tmp;
+                }
+                
+                return last;
             }
-            
-            return last;
         }
     }
     RobotInstruction tmp;

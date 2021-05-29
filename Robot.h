@@ -75,6 +75,7 @@ class Robot{
         float init_angle[MAX_NUM_SERVOS];
         float last_angles[MAX_NUM_SERVOS];
         int count_same_angles;
+        unsigned long sleep_until;
     public:
         Robot(int id, int port);
         ~Robot();
