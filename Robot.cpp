@@ -236,7 +236,7 @@ void Robot::stopServos() {
         this->servos->setPwmMove(i+1,0);
         this->moving_servos[i] = false;
     }
-    this->setBreaks(true);
+    //this->setBreaks(true);
 }
 
 float Robot::getAngle(int id) {
