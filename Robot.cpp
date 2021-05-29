@@ -139,27 +139,12 @@ RobotInstruction Robot::finishCurrentRobotInstruction() {
 
 DriveInstruction Robot::getDriveInstruction(int id, RobotInstruction cmd) {
     return cmd.servo[id-1];
-    // switch (id) {
-    //     case 1: return cmd.servo[0];
-    //         break;
-    //     case 2: return cmd.servo[1];
-    //         break;
-    //     case 3: return cmd.servo[2];
-    //         break;
-    // }
 }
 
 DriveInstruction Robot::getCurrentDriveInstruction(int id) {
     RobotInstruction cur_cmd = this->getCurrentRobotInstruction();
     return this->getDriveInstruction(id, cur_cmd);
 }
-
-// bool Robot::start() {
-//     if (this->cmdAvailable() == false) {
-//         return false;
-//     }
-//     this->driveAllServo(this->getCurrentRobotInstruction());
-// }
 
 bool Robot::checkCmd() {
     if (this->cmdAvailable() == false) {
@@ -256,11 +241,8 @@ RobotInstruction Robot::synchronizeServos(RobotInstruction cmd) {
     this->getAngles(act_angles);
     double delta_max = 0;
 
-    // Serial.print("Target speed: ");Serial.println(cmd.servo[0].speed);
-
     for (int i = 0; i < this->num_servos; i++) {
         diff_angles[i] = fabs(cmd.servo[i].angle - act_angles[i]);
-        // Serial.print(i);Serial.print(" Diff: ");Serial.println(diff_angles[i]);
         if (diff_angles[i] > delta_max) {
             delta_max = diff_angles[i];
         }
@@ -269,14 +251,11 @@ RobotInstruction Robot::synchronizeServos(RobotInstruction cmd) {
     if (delta_max>0) {
         //Noetige Zeit wird berechnet
         double time = delta_max/cmd.servo[0].speed;
-        // Serial.print("Diff max: ");Serial.println(delta_max);
-        // Serial.print("time: ");Serial.println(time);
 
         for (int i = 0; i < this->num_servos; i++) {
             cmd.servo[i].speed = diff_angles[i]/time;
             if (cmd.servo[i].speed < SPEED_MIN)
                 cmd.servo[i].speed = SPEED_MIN;
-            // Serial.print(i);Serial.print(" Speed: ");Serial.println(cmd.servo[i].speed);
         }
     }
 
@@ -331,15 +310,6 @@ bool Robot::checkCollision() {
 }
 
 bool Robot::driveServo(int id, DriveInstruction cmd) {
-    // if (id == 1 && this->id == 1) {
-    //     Serial.print("Angle: ");Serial.print(cmd.angle - this->init_angle[id-1]);
-    //     Serial.print("; Speed: ");Serial.println(cmd.speed);
-    // }
-    // this->servos->setBreak(id, false);
-    // Serial.print("DEBUG: Drive Servo: ");Serial.println(id);
-    // Serial.print("DEBUG: Angle:  ");Serial.print(cmd.angle);
-    // Serial.print("; Cur Ang:");Serial.print(this->servos->getAngleRequest(id)+this->init_angle[id-1]);
-    // Serial.print("; Speed:  "); Serial.println(cmd.speed);
     return this->servos->moveTo(id, cmd.angle - this->init_angle[id-1], cmd.speed);
 }
 
@@ -367,7 +337,6 @@ DriveInstruction Robot::smoothCmd(DriveInstruction cmd, float last_speed) {
 }
 
 bool Robot::driveAllServo(RobotInstruction cmd) {
-    // Serial.println("DEBUG: Drive All Servo");
     bool success = true;
     for (int i = 1; i <= this->num_servos; i++) {
         DriveInstruction drive = this->getDriveInstruction(i, cmd);
@@ -375,15 +344,6 @@ bool Robot::driveAllServo(RobotInstruction cmd) {
         if (cmd.speed_smooth) {
             drive = this->smoothCmd(drive, this->last_speed[i-1]);
         }
-
-        // if (i == 1 && this->id == 1) {
-        //     Serial.print("DEBUG: Speed target  : ");
-        //     Serial.println(cmd.servo[i-1].speed);
-        //     Serial.print("DEBUG: Speed last  : ");
-        //     Serial.println(this->last_speed[i-1]);
-        //     Serial.print("DEBUG: Speed after : ");
-        //     Serial.println(new_cmd.speed);
-        // }
 
         this->last_speed[i-1] = drive.speed;
         
