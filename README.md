@@ -32,12 +32,15 @@ This is an implementation for controlling a robot with MS-12A motors from Makebl
 
 # Preperation
 
-* Make sure the setup function and the defines are correct for your usage
-  * But should work out of the box
-* At default the first robot is connected at 16 (TX, yellow) and 17 (RX, white), and the second robot at 14 (TX, yellow) and 15 (RX, white). Additionally the servos must be powered by 12V.
-  * It is possible to add one more robot.
+* Connecting robots
+  * First robot (id 1) is connected to 14 (TX, yellow) and 15 (RX, white)
+  * Second robot (id 2) is connected to 16 (TX, yellow) and 17 (RX, white)
+  * Third robot (id 3) is connected to 18 (TX, yellow) and 19 (RX, white)
+  * Additionally the servos must be powered by 12V.
+  * The ground (GND) of Arduino and the ground of the power supply must be connected
+  * The program can run with one, two or three robots
 * At default only three servos per robot are supported
-  * A define must be changed an the cmd parse must be extended
+  * To allow more, a define must be changed an the cmd parse must be extended
 
 # API
 
