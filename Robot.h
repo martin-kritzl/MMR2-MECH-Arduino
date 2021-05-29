@@ -58,6 +58,7 @@ struct RobotInstruction
     bool speed_smooth = false;
     bool synchronize = false;
     bool enabled = false;
+    bool collision = false;
     unsigned int delay = 0;
 };
 

@@ -615,9 +615,8 @@ void loop() {
         if (actCmd.enabled == true) {
             rob_print_move(i+1, actCmd, robots[i]->getNumServos());
         }
-        if (robots[i]->checkCollision()) {
-            robots[i]->disableServos();
-            Serial.println("ERROR: Collision detected");
+        if (actCmd.collision) {
+            Serial.print("err;rob;");Serial.print(i);Serial.println(";collision");
         }
     }
 }

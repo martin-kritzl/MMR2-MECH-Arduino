@@ -105,7 +105,6 @@ bool Robot::isConnected() {
     if (this->num_servos == 0) return false;
     for (int i = 1; i <= this->num_servos;i++) {
         float voltage = this->servos->getVoltageRequest(i);
-        Serial.print(i);Serial.print(": ");Serial.println(voltage);
         if (voltage < MIN_VOLTAGE || voltage > MAX_VOLTAGE)
             return false;
     }
@@ -186,6 +185,7 @@ void Robot::setInitAngles(float init_angles[]) {
 }
 
 RobotInstruction Robot::cmdFinished() {
+    RobotInstruction result;
     if (millis() > this->sleep_until) {
         // Reset der Zeit, sonst kommt es beim overflow von millis() zu einer
         // falschen Wartezeit
@@ -194,19 +194,22 @@ RobotInstruction Robot::cmdFinished() {
             this->driveAllServo(this->getCurrentRobotInstruction());
 
             if (this->checkAllServo(this->getCurrentRobotInstruction())) {
-                RobotInstruction last = this->finishCurrentRobotInstruction();
+                result = this->finishCurrentRobotInstruction();
                 if (this->getCurrentRobotInstruction().synchronize) {
                     RobotInstruction tmp = this->synchronizeServos(this->getCurrentRobotInstruction());
                     this->move_buffer[read_buffer] = tmp;
                 }
                 
-                return last;
+                return result;
+            }
+            if (this->checkCollision()) {
+                this->disableServos();
+                result.collision = true;
             }
         }
     }
-    RobotInstruction tmp;
-    tmp.enabled = false;
-    return tmp;
+    result.enabled = false;
+    return result;
 }
 
 bool Robot::checkAllServo(RobotInstruction cmd) {
