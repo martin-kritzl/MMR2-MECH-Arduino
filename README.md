@@ -76,7 +76,7 @@ Get Angles of servos:
 Start all servos:
 * **Input**: rob;\<id>;start
 * **Return**: rob;\<id>;start
-* **Note**: When starting the programm this command is triggert automatically
+* **Note**: When starting the programm this command is triggered automatically
 
 Stop all servos:
 * **Input**: rob;\<id>;stop
