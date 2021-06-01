@@ -98,9 +98,10 @@ Status of the robot:
 
 ## Parameters
 * **id**: Id of the robot starting by 1
-* **thetaX**: Absolut angle depending on the init
-* **speedX**: The speed in rpm the servo should move
-* **exact**: Defines if the point should be reached exactly (e.g.: when using linear movement use false for points in between)
-* **speed_smooth**: Defines if the speed should be increased and decreased smoothly
-* **synchronize**: Defines if all servos should be synchronized. That means that they are starting and stopping the movement at the same time
+* **thetaX**: Absolut angle depending on the init (specify only as many angles as the robot has motors)
+* **speedX**: The speed in rpm the servo should move (specify only as many speeds as the robot has motors)
+* **exact**: Defines if the point should be reached exactly (e.g.: when using linear movement use false for points in between) [true/false]
+* **speed_smooth**: Defines if the speed should be increased and decreased smoothly [true/false]
+* **synchronize**: Defines if all servos should be synchronized. That means that they are starting and stopping the movement at the same time [true/false]
 * **delay**: Defines how many milliseconds the robot should wait after the movement
+* **break_status**: Enable or disable breaks (disable for teaching; enable for movement) [true/false]
