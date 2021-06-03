@@ -28,17 +28,17 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #include <SoftwareSerial.h>
 #include "Robot.h"
 
-#define ROBOTS_NUM 3
+#define ROBOTS_NUM 2
 #define SERVO_NUM_1 2
 #define SERVO_NUM_2 1
 #define INPUT_SIZE 50
 
-#define UART1_TX 14
-#define UART1_RX 15
+#define UART1_TX 18
+#define UART1_RX 19
 #define UART2_TX 16
 #define UART2_RX 17
-#define UART3_TX 18
-#define UART3_RX 19
+#define UART3_TX 14
+#define UART3_RX 15
 
 int rob_parse_init(const char* token, float output[]);
 bool rob_parse_break(const char* token);

@@ -37,9 +37,10 @@ unsigned long cur_time;
 MePort_Sig mePort[17] =
 {
     { NC, NC }, {   5,   4 }, {   3,   2 }, {   7,   6 }, {   9,   8 }, 
-    { 16, 17 }, { A10, A15 }, {  A9, A14 }, {  A8, A13 }, {  A7, A12 }, 
-    { A6,A11 }, {  UART1_TX,  UART1_RX }, {  UART2_TX,  UART2_RX }, {  UART3_TX,  UART3_RX }, {  NC,  A1 },
-    { NC, NC }, { NC, NC },
+    { UART2_TX, UART2_RX }, { UART1_TX, UART1_RX }, {  A9, A14 }, {  A8, A13 }, {  A7, A12 }, 
+    //             LIGHT2        LIGHT1        TEMP          SOUND
+    { A6,A11 }, {  NC,  A2 }, {  NC,  A3 }, {  NC,  A0 }, {  NC,  A1 },
+    { UART3_TX, UART3_RX }, { NC, NC },
 };
 
 Robot* robots[ROBOTS_NUM];
@@ -301,9 +302,8 @@ void setup() {
     Serial.begin(115200);               // set the data rate for the SoftwareSerial port
     delay(50);                          // must delay over 50ms
 
-    robots[0] = new Robot(1, 11);
-    robots[1] = new Robot(2, 12);
-    robots[2] = new Robot(3, 13);
+    robots[0] = new Robot(1, 5);
+    robots[1] = new Robot(2, 15);
     
     // Ansonsten stoppen die Servos zu beginn und fahren dann erst an
     delay(1000);
