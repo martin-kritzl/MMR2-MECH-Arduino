@@ -94,7 +94,7 @@ class Robot{
         RobotInstruction finishCurrentRobotInstruction();
         RobotInstruction cmdFinished();
         void resetSpeeds();
-        void setBreaks(bool break_status);
+        void setBreaks(bool break_status, bool force);
         bool isConnected();
         void stopServos();
         void enableServos();

@@ -284,7 +284,7 @@ void rob_parse(const char* token) {
             }
             else if (!strncasecmp(token, "break", 5)) {
                 bool break_status = rob_parse_break(token);
-                robots[robot_index]->setBreaks(break_status);
+                robots[robot_index]->setBreaks(break_status,true);
                 Serial.print(F("rob;"));Serial.print(robot_index+1);Serial.println(F(";break"));
             } else {
                 Serial.println(F("ERROR: Command not found"));

@@ -38,6 +38,7 @@ Robot::Robot(int id, int port) {
     this->servos->assignDevIdRequest();
     delay(1000);
     this->stopServos();
+    this->setBreaks(false,true);
 }
 
 Robot::~Robot() {
@@ -96,8 +97,8 @@ void Robot::resetSpeeds() {
     }
 }
 
-void Robot::setBreaks(bool break_status) {
-    if (this->cur_break_status != break_status) {
+void Robot::setBreaks(bool break_status, bool force) {
+    if ((this->cur_break_status != break_status) || force) {
         bool status = false;
         for (int i = 0; i < this->num_servos;i++) {
             status = this->servos->setBreak(i+1, !break_status);
@@ -200,7 +201,7 @@ RobotInstruction Robot::cmdFinished() {
         }
     } else {
         //Wenn ein Befehl einen delay hat, sollen in dieser Zeit die Bremsen aktiv sein
-        this->setBreaks(true);
+        this->setBreaks(true,false);
     }
     result.enabled = false;
     return result;
@@ -230,7 +231,7 @@ void Robot::stopServos() {
         this->servos->setPwmMove(i+1,0);
         this->moving_servos[i] = false;
     }
-    this->setBreaks(true);
+    this->setBreaks(true,false);
 }
 
 float Robot::getAngle(int id) {
@@ -347,7 +348,7 @@ DriveInstruction Robot::smoothCmd(DriveInstruction cmd, float last_speed) {
 
 bool Robot::driveAllServo(RobotInstruction cmd) {
     bool success = true;
-    this->setBreaks(false);
+    this->setBreaks(false,false);
     for (int i = 1; i <= this->num_servos; i++) {
         DriveInstruction drive = this->getDriveInstruction(i, cmd);
 
