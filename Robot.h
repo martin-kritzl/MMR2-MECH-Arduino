@@ -78,6 +78,7 @@ class Robot{
         int count_same_angles;
         unsigned long sleep_until;
         bool cur_break_status;
+        DriveInstruction last_send_inst[MAX_NUM_SERVOS];
     public:
         Robot(int id, int port);
         ~Robot();

@@ -320,6 +320,11 @@ bool Robot::checkCollision() {
 }
 
 bool Robot::driveServo(int id, DriveInstruction cmd) {
+    if (this->last_send_inst[id-1].angle == cmd.angle && this->last_send_inst[id-1].speed == cmd.speed) {
+        return true;
+    } else {
+        this->last_send_inst[id-1] = cmd;
+    }
     return this->servos->moveTo(id, cmd.angle - this->init_angle[id-1], cmd.speed);
 }
 
