@@ -27,10 +27,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAX_NUM_SERVOS 3
 #define BUFFER_LEN 20
-#define COLLISION_MAX_COUNT 20
+#define COLLISION_MAX_COUNT 100
 
 #define ANGLE_TOLERANCE 7
-#define ANGLE_TOLERANCE_EXACT 2
+#define ANGLE_TOLERANCE_EXACT 1
 #define SPEED_MIN 5
 #define SPEED_INCREMENT 0.8
 
