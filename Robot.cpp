@@ -179,6 +179,11 @@ void Robot::setInitAngles(float init_angles[]) {
     for (int i = 0; i < this->num_servos;i++) {
         this->init_angle[i] = init_angles[i];
         this->last_angles[i] = init_angles[i];
+    }
+}
+
+void Robot::calibrate() {
+    for (int i = 1; i <= this->num_servos;i++) {
         this->servos->setZero(i+1);
     }
 }

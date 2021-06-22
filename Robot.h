@@ -27,10 +27,10 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define MAX_NUM_SERVOS 3
 #define BUFFER_LEN 20
-#define COLLISION_MAX_COUNT 100
+#define COLLISION_MAX_COUNT 300
 
 #define ANGLE_TOLERANCE 7
-#define ANGLE_TOLERANCE_EXACT 1
+#define ANGLE_TOLERANCE_EXACT 2
 #define SPEED_MIN 1
 #define SPEED_INCREMENT 0.8
 
@@ -102,6 +102,7 @@ class Robot{
         void disableServos();
         void clearCmds();
         void setInitAngles(float init_angles[]);
+        void calibrate();
         float getAngle(int id);
         void getAngles(float angles[]);
         bool isMoving();
