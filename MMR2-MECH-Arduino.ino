@@ -352,7 +352,7 @@ void loop() {
             rob_print_move(i+1, actCmd, robots[i]->getNumServos());
         }
         if (actCmd.collision) {
-            Serial.print(F("err;rob;"));Serial.print(i);Serial.println(F(";collision"));
+            Serial.print(F("err;rob;"));Serial.print(i+1);Serial.println(F(";collision"));
         }
     }
 }
