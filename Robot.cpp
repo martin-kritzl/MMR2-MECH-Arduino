@@ -101,7 +101,7 @@ void Robot::setBreaks(bool break_status, bool force) {
     if ((this->cur_break_status != break_status) || force) {
         bool status = false;
         for (int i = 0; i < this->num_servos;i++) {
-            status = this->servos->setBreak(i+1, !break_status);
+            //status = this->servos->setBreak(i+1, !break_status);
             Serial.print("setBreak status: ");Serial.println(status);
         }
         this->cur_break_status = break_status;
