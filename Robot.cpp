@@ -37,8 +37,7 @@ Robot::Robot(int id, int port) {
     delay(5);
     this->servos->assignDevIdRequest();
     delay(1000);
-    this->stopServos();
-    this->setBreaks(false,true);
+    this->setBreaks(true,true);
 }
 
 Robot::~Robot() {
@@ -62,6 +61,11 @@ bool Robot::newCmd(RobotInstruction cmd) {
         return false;
     }
 
+    //Wenn kein Befehl vorhanden, dann wird der Roboter in running state versetzt
+    if (cmdAvailable() == false) {
+        this->setAllServosMoving();
+    }
+
     //Fuer die Befehle welche alleine im Buffer sind
     //Ansonsten wuerde die Synchronisierung nicht angewendet werden, 
     //da in Methode cmdFinished den aktuellen Befehl nicht synchronisieren wuerde
@@ -71,6 +75,7 @@ bool Robot::newCmd(RobotInstruction cmd) {
 
     this->move_buffer[write_buffer] = cmd;
     this->increase_write_buffer();
+
     return true;
     
 }
@@ -99,10 +104,12 @@ void Robot::resetSpeeds() {
 
 void Robot::setBreaks(bool break_status, bool force) {
     if ((this->cur_break_status != break_status) || force) {
-        bool status = false;
         for (int i = 0; i < this->num_servos;i++) {
-            //status = this->servos->setBreak(i+1, !break_status);
-            Serial.print("setBreak status: ");Serial.println(status);
+            if (break_status == true) {
+                this->moving_servos[i] = false;
+            } else {
+                this->servos->setPwmMove(i+1, 0);
+            }
         }
         this->cur_break_status = break_status;
     }
@@ -158,7 +165,7 @@ bool Robot::checkCmd() {
         //Wenn kein Befehl mehr vorhanden und der State noch immer auf running ist
         //Alle Motoren stoppen und running auf false setzen
         if (this->isMoving()) {
-            this->stopServos();
+            this->setBreaks(true,true);
         }
         
         return false;
@@ -167,7 +174,7 @@ bool Robot::checkCmd() {
 }
 
 void Robot::setInitAngles(float init_angles[]) {
-    this->stopServos();
+    this->setBreaks(true,false);
     this->clearCmds();
     for (int i = 0; i < this->num_servos;i++) {
         this->init_angle[i] = init_angles[i];
@@ -199,9 +206,6 @@ RobotInstruction Robot::cmdFinished() {
                 result.collision = true;
             }
         }
-    } else {
-        //Wenn ein Befehl einen delay hat, sollen in dieser Zeit die Bremsen aktiv sein
-        this->setBreaks(true,false);
     }
     result.enabled = false;
     return result;
@@ -213,24 +217,18 @@ bool Robot::checkAllServo(RobotInstruction cmd) {
         DriveInstruction drive = this->getCurrentDriveInstruction(i);
         if (this->checkServo(i, drive.angle - this->init_angle[i-1], cmd.exact) == true) {
             this->moving_servos[i-1] = false;
-        } else {
-            this->moving_servos[i-1] = true;
         }
     }
     if (this->isMoving()) {
         return false;
     }
     if (cmd.exact) {
-        this->stopServos();
+        this->setBreaks(true,true);
     }
     return true;
 }
 
 void Robot::stopServos() {
-    for (int i = 0; i < this->num_servos;i++) {
-        this->servos->setPwmMove(i+1,0);
-        this->moving_servos[i] = false;
-    }
     this->setBreaks(true,false);
 }
 
@@ -257,7 +255,6 @@ RobotInstruction Robot::synchronizeServos(RobotInstruction cmd) {
             delta_max = diff_angles[i];
         }
     }
-
     if (delta_max>0) {
         //Noetige Zeit wird berechnet
         double time = delta_max/cmd.servo[0].speed;
@@ -268,7 +265,6 @@ RobotInstruction Robot::synchronizeServos(RobotInstruction cmd) {
                 cmd.servo[i].speed = SPEED_MIN;
         }
     }
-
     return cmd;
 }
 
@@ -314,6 +310,8 @@ bool Robot::checkCollision() {
     }
 
     if (this->count_same_angles > COLLISION_MAX_COUNT) {
+        //Reset des Counters fuer naechsten Fehlerfall
+        this->count_same_angles = 0;
         return true;
     }
     return false;
@@ -353,7 +351,6 @@ DriveInstruction Robot::smoothCmd(DriveInstruction cmd, float last_speed) {
 
 bool Robot::driveAllServo(RobotInstruction cmd) {
     bool success = true;
-    this->setBreaks(false,false);
     for (int i = 1; i <= this->num_servos; i++) {
         DriveInstruction drive = this->getDriveInstruction(i, cmd);
 
@@ -375,12 +372,12 @@ void Robot::enableServos() {
 }
 
 void Robot::disableServos() {
-    this->stopServos();
+    this->setBreaks(false,true);
     this->started = false;
 }
 
 void Robot::clearCmds() {
-    this->stopServos();
+    this->setBreaks(true,true);
     RobotInstruction tmp;
     tmp.enabled = false;
     for (int i = 0; i < BUFFER_LEN; i++) {

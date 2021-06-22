@@ -31,7 +31,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 #define ANGLE_TOLERANCE 7
 #define ANGLE_TOLERANCE_EXACT 1
-#define SPEED_MIN 5
+#define SPEED_MIN 1
 #define SPEED_INCREMENT 0.8
 
 #define MIN_VOLTAGE 6.0
