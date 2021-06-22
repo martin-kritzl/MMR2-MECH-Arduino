@@ -287,6 +287,10 @@ void rob_parse(const char* token) {
                 robots[robot_index]->calibrate();
                 Serial.print(F("rob;"));Serial.print(robot_index+1);Serial.println(F(";calibrate"));
             }
+            else if (!strncasecmp(token, "reconnect", 9)) {
+                robots[robot_index]->connectServos();
+                Serial.print(F("rob;"));Serial.print(robot_index+1);Serial.println(F(";reconnect"));
+            }
             else if (!strncasecmp(token, "break", 5)) {
                 bool break_status = rob_parse_break(token);
                 robots[robot_index]->setBreaks(break_status,true);

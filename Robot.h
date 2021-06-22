@@ -103,6 +103,7 @@ class Robot{
         void clearCmds();
         void setInitAngles(float init_angles[]);
         void calibrate();
+        void connectServos();
         float getAngle(int id);
         void getAngles(float angles[]);
         bool isMoving();

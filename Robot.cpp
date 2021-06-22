@@ -35,9 +35,7 @@ Robot::Robot(int id, int port) {
     this->servos = new MeSmartServo(port);
     this->servos->begin(115200);
     delay(5);
-    this->servos->assignDevIdRequest();
-    delay(1000);
-    this->setBreaks(true,true);
+    this->connectServos();
 }
 
 Robot::~Robot() {
@@ -187,6 +185,13 @@ void Robot::calibrate() {
         this->servos->setZero(i+1);
     }
 }
+
+void Robot::connectServos() {
+    this->servos->assignDevIdRequest();
+    delay(1000);
+    this->setBreaks(true,true);
+}
+    
 
 RobotInstruction Robot::cmdFinished() {
     RobotInstruction result;
