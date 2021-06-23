@@ -31,7 +31,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 #define ROBOTS_NUM 2
 #define SERVO_NUM_1 2
 #define SERVO_NUM_2 1
-#define INPUT_SIZE 50
+#define INPUT_SIZE 256
 
 #define UART1_TX 18
 #define UART1_RX 19
