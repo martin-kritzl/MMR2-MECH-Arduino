@@ -51,6 +51,11 @@ Initialize Position:
 * **Return**: rob;\<id>;init
 * **Note**: set angles to zero when tcp already in coordinate origin
 
+Calibrate robot:
+* **Input**: rob;\<id>;calibrate
+* **Return**: rob;\<id>;calibrate;
+* **Note**: When using the robot for the first time the servos must be calibrated. So the zero-position must be set.The axes must be moved to the zero position by hand and then the command must be executed.
+
 Simple Movement:
 * **Input**: rob;\<id>;move;\<theta1>;\<speed1>;\<theta2>;\<speed2>;\<theta3>;\<speed3>
 * **Return**: rob;\<id>;move
@@ -94,6 +99,11 @@ Status of the robot:
 * **Input**: rob;\<id>;status
 * **Return**: rob;\<id>;\<disabled/uninitialized/disconnected/idle/moving>
 * **Note**: disabled (Collision was detected, start robot with start command and maybe clear before); uninitialized (the init command has to be send before); disconnected (one or more servos are not connected); idle (there is nothing in the buffer and robot is not moving); moving (robot moves at the moment)
+
+Reconnect the servos:
+* **Input**: rob;\<id>;reconnect
+* **Return**: rob;\<id>;reconnect;
+* **Note**: After the servos are disconnected from the power, they must be reconnected
 
 ## Parameters
 * **id**: Id of the robot starting by 1

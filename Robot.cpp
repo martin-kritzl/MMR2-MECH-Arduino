@@ -59,14 +59,14 @@ bool Robot::newCmd(RobotInstruction cmd) {
         return false;
     }
 
-    //Wenn kein Befehl vorhanden, dann wird der Roboter in running state versetzt
+    //If no command is present, then the robot is set to running state.
     if (cmdAvailable() == false) {
         this->setAllServosMoving();
     }
 
-    //Fuer die Befehle welche alleine im Buffer sind
-    //Ansonsten wuerde die Synchronisierung nicht angewendet werden, 
-    //da in Methode cmdFinished den aktuellen Befehl nicht synchronisieren wuerde
+    //For the commands which are alone in the buffer
+    //Otherwise the synchronization would not be applied, 
+    //because in method cmdFinished the current command would not be synchronized.
     if (cmd.synchronize && this->read_buffer == this->write_buffer) {
         cmd = this->synchronizeServos(cmd);
     }
@@ -140,8 +140,8 @@ RobotInstruction Robot::finishCurrentRobotInstruction() {
 
     this->sleep_until = millis() + finished.delay;
 
-    // Es muss zumindest ein Motor wieder auf moving gesetzt werden, wenn noch ein
-    // Befehl im Buffer ist, weil ansonst der Status idle zwischendurch angezeigt wird.
+    // At least one motor must be set to moving again if there is still a
+    // command in the buffer, because otherwise the status idle is displayed in between.
     if (this->cmdAvailable()) {
         this->moving_servos[0] = true;
     }
@@ -160,8 +160,8 @@ DriveInstruction Robot::getCurrentDriveInstruction(int id) {
 
 bool Robot::checkCmd() {
     if (this->cmdAvailable() == false) {
-        //Wenn kein Befehl mehr vorhanden und der State noch immer auf running ist
-        //Alle Motoren stoppen und running auf false setzen
+        //If there is no more command and the state is still running
+        //Stop all motors and set running to false
         if (this->isMoving()) {
             this->setBreaks(true,true);
         }
@@ -196,8 +196,8 @@ void Robot::connectServos() {
 RobotInstruction Robot::cmdFinished() {
     RobotInstruction result;
     if (millis() > this->sleep_until) {
-        // Reset der Zeit, sonst kommt es beim overflow von millis() zu einer
-        // falschen Wartezeit
+        // Reset the time, otherwise the overflow of millis() will result in a
+        // wrong waiting time
         this->sleep_until = 0;
         if (this->checkCmd() == true && this->started == true) {
             this->driveAllServo(this->getCurrentRobotInstruction());
@@ -266,7 +266,7 @@ RobotInstruction Robot::synchronizeServos(RobotInstruction cmd) {
         }
     }
     if (delta_max>0) {
-        //Noetige Zeit wird berechnet
+        //Necessary time is calculated
         double time = delta_max/cmd.servo[0].speed;
 
         for (int i = 0; i < this->num_servos; i++) {
@@ -320,7 +320,7 @@ bool Robot::checkCollision() {
     }
 
     if (this->count_same_angles > COLLISION_MAX_COUNT) {
-        //Reset des Counters fuer naechsten Fehlerfall
+        //Reset the counter for the next error case
         this->count_same_angles = 0;
         return true;
     }

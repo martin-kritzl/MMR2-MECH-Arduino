@@ -313,7 +313,7 @@ void setup() {
     robots[0] = new Robot(1, 5);
     robots[1] = new Robot(2, 15);
     
-    // Ansonsten stoppen die Servos zu beginn und fahren dann erst an
+    //Otherwise the servos stop at the beginning
     delay(1000);
 
     Serial.print(F("INFO: "));Serial.print(ROBOTS_NUM);Serial.println(F(" robots are ready. Make sure to init first."));
