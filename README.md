@@ -1,5 +1,6 @@
 # Overview
-This is an implementation for controlling a robot with MS-12A motors from Makeblock. 
+This is an implementation for controlling a robot with MS-12A motors from Makeblock.
+Repository: https://github.com/martin-kritzl/MMR2-MECH-Arduino
 
 # Features
 * PTP Movement 
